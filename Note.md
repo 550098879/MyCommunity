@@ -79,7 +79,24 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
 4)其他数据库的连接也累死,但是直接连接数据库,而H2数据库则是先创建数据库再使用.  
 
 ###SpringBoot整合MyBatis
+1.引入依赖
+```
+<!--MyBatis的依赖,来自mybatis-->
+	<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.3.2</version>
+	</dependency>
+  <!--jdbc的依赖-->
+  <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
 
+```
+2.编写持久化接口(数据库操作接口),有两种方式执行sql  
+1)在编写的repository接口上添加@Mapper注解,然后在方法上添加@S/U/D/I(sql语句)注解,执行sql语句  
+2)编写单独的Mapping文件,放在指定文件中,并在application.properties中添加路径配置,配置完成即可调用接口中的方法
 
  
 
