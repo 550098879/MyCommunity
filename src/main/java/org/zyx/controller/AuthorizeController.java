@@ -7,7 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zyx.entity.AccessTokenDTO;
 import org.zyx.entity.GithubUser;
+import org.zyx.entity.User;
 import org.zyx.provider.GithubProvider;
+import org.zyx.repository.UserRepository;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.UUID;
 
 /**GitHub认证
  * Created by SunShine on 2020/4/16.
@@ -18,6 +25,8 @@ public class AuthorizeController {
 
     @Autowired
     private GithubProvider githubProvider;
+    @Autowired
+    private UserRepository userRepository;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -30,7 +39,8 @@ public class AuthorizeController {
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state") String state){
+                           @RequestParam(name = "state") String state,
+                           HttpServletRequest request){
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -40,10 +50,29 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
 
-        GithubUser user = githubProvider.getUser(accessToken);
-        System.out.println(user);
+        GithubUser Guser = githubProvider.getUser(accessToken);
+        System.out.println(Guser);
 
-        return "index";
+        if(Guser!=null){
+            //登陆成功,设置session和cookie
+            User user = new User();
+            user.setToken(UUID.randomUUID().toString());//随机唯一id
+            user.setName(Guser.getName());
+            user.setAccount_id(String.valueOf(Guser.getId()));//强制转换
+//            user.setGmt_create(new Date().getTime());
+            user.setGmt_create(System.currentTimeMillis());//当前毫秒数
+            user.setGmt_modified(user.getGmt_create());
+            userRepository.insert(user);//存储进数据库中
+
+            HttpSession session=request.getSession();
+            session.setAttribute("Guser",Guser);
+            return "redirect:/";//重定向
+        }else{
+            //登陆失败,重新登陆
+        }
+
+
+        return "redirect:/";//请求转发
     }
 
 

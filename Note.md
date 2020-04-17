@@ -31,7 +31,8 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
 #####注意事项  
 
 1.OkHttp中的response.body().string();操作实际上是流操作,只执行一次.  
-2.出现Connection reset的原因可能是当前网络请求次数过多,可以重启网络尝试解决
+2.出现Connection reset的原因可能是当前网络请求GitHub太慢,可以重启网络尝试解决  
+或者更换浏览器试试
 3.AccessTokenDTO()实体类的参数都对应OAuth Apps 中的帮助文档中的参数,不可写错.
 4.涉及的包和类:   
  provider:授权管理相关类  
@@ -56,12 +57,29 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
 6.流程总结:  
   
 1)通过bootstrap完成简单的登陆界面     
- 
 2)前往GitHub创建一个OAuth App,阅读授权OAuth应用文档,完成创建
 3)绑定登陆访问连接:https://github.com/login/oauth/authorize?client_id=c675236053a463ef56cb&redirect_uri=http://localhost:7777/callback&scope=user&state=1
 4)获取AccessToken,先发送post请求获取AccessToken,再通过get请求获取用户信息(provider.GithubProvider) 
 5)通过访问令牌(AccessToken)获取用户信息  
-6)此处还未完全完成登录功能,只是可以获取到自己的GitHub用户信息.
+6)此处还未完全完成登录功能,只是可以获取到自己的GitHub用户信息.  
+
+###H2数据库(嵌入式数据库)  
+1.引入H2数据库依赖  
+```
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>1.4.199</version>
+</dependency>
+```
+2.调用idea的Database工具栏,连接H2数据库,只需要设置数据库存放位置即可.  
+1)url:jdbc:h2:d:/H2/community windows填写具体文件路径
+2)下载driver,测试连接,成功后H2文件夹下面会多出一个数据库文件,连接成功.  
+3)直接操作创建的数据库,new 新增需要的表或其他信息  
+4)其他数据库的连接也累死,但是直接连接数据库,而H2数据库则是先创建数据库再使用.  
+
+###SpringBoot整合MyBatis
+
 
  
 
