@@ -110,7 +110,11 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
 1)在编写的repository接口上添加@Mapper注解,然后在方法上添加@S/U/D/I(sql语句)注解,执行sql语句  
 2)编写单独的Mapping文件,放在指定文件中,并在application.properties中添加路径配置,配置完成即可调用接口中的方法
 
- 
+
+###通过cookie实现服务器重启而不影响登陆状态
+ 1.第一次登陆成功后,将数据保存到数据库,同时使用UUID获取一个唯一的token存储到数据库中(作为查询使用)  
+ 2.下次登陆时,进入主页后遍历cookie,查找是否存在token,存在则查询数据库,并将数据存储到session中即可.  
+ 3.此处受益于thymeleaf模板,可以根据登陆状态控制组件的显示和消除
 
         
 
