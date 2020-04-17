@@ -85,8 +85,8 @@
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 
-
 	</dependencies>
+
 
 
 
@@ -97,6 +97,27 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!--FlyWay H2数据库同步(记录下操作,并依次执行脚本)-->
+			<!--mvn flyway:migrate 执行方法-->
+			<!--当修改了数据库表的时候,可以添加V2_Add_bio_to_user_table.sql(形容修改操作),然后执行该sql语句-->
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>6.3.3</version>
+				<configuration>
+					<url>jdbc:h2:d:/H2/community</url>
+					<user>sa</user>
+					<password>123</password>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.h2database</groupId>
+						<artifactId>h2</artifactId>
+						<version>1.4.199</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

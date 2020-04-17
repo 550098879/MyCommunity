@@ -23,8 +23,8 @@ public interface UserRepository {
 
     User findById(Integer id);
 
-    @Insert("insert into user(account_id,name,token,gmt_create,gmt_modified) " +
-            "values(#{account_id},#{name},#{token},#{gmt_create},#{gmt_modified})")
+    @Insert("insert into user(account_id,name,token,gmt_create,gmt_modified,bio) " +
+            "values(#{account_id},#{name},#{token},#{gmt_create},#{gmt_modified},#{bio})")
     void insert(User user);
     void update(User user);
     void deleteById(Integer id);

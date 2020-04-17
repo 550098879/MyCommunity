@@ -16,6 +16,7 @@ public class User {
     private String token;
     private Long gmt_create;//创建时间
     private Long gmt_modified;//改动时间
+    private String bio;//简介
 
 
 }
