@@ -117,7 +117,35 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
  3.此处受益于thymeleaf模板,可以根据登陆状态控制组件的显示和消除
 
         
+###Flyway数据库更新控制
+1.基于H2的数据库变更脚本记录
+2.引入依赖,添加到<build><plugins>中,
+```xml
+    <!--FlyWay H2数据库同步(记录下操作,并依次执行脚本)-->
+    <!--mvn flyway:migrate 执行更新方法-->
+    <!--当修改了数据库表的时候,可以添加V2_Add_bio_to_user_table.sql(形容操作),然后执行该sql语句-->
+    <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>6.3.3</version>
+        <configuration>
+            <url>jdbc:h2:d:/H2/community</url>
+            <user>sa</user>
+            <password>123</password>
+        </configuration>
+        <dependencies>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.199</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+    
 
+```
+3.在修改了数据库够,只需要在db/migration文件下添加一个相应的修改sql,并执行  
+mvn flyway:migrate 命令即可
 
 
 

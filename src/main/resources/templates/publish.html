@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>刈剑社区</title>
+    <title>发布 - 刈剑社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -18,11 +18,12 @@
             background: white;
             opacity: 0.9;
         }
-
     </style>
+
 
 </head>
 <body>
+
 
 <div style="width:90%;margin: 0 auto;" class="container">
     <!--导航栏-->
@@ -31,7 +32,7 @@
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">
-                    刈剑社区
+                       刈剑社区
                     </span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -59,7 +60,6 @@
                             <i th:text="${session.user.getName()}"></i><span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/publish">发布问题</a></li>
                             <li><a href="#">消息中心</a></li>
                             <li><a href="#">个人资料</a></li>
                             <li role="separator" class="divider"></li>
@@ -71,17 +71,72 @@
         </div><!-- /.container-fluid -->
     </nav>
 
+    <!--主面板-->
 
-    <!-- 16:9 aspect ratio 可以实现动态切换 -->
-    <!--<div class="embed-responsive embed-responsive-4by3">-->
-        <!--<iframe class="embed-responsive-item" id="iframe"></iframe>-->
-    <!--</div>-->
-    <!--<script>-->
-        <!--iframe.src="/publish";-->
-    <!--</script>-->
+    <div class="container-fluid" style="margin:30px;">
+        <div class="row">
+            <!--发起区-->
+            <div class="col-md-9">
+                <h2>
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>发起
+                </h2>
+                <hr>
 
+                <form action="">
+                    <div class="form-group">
+                        <label for="title">问题标题(简单扼要):</label>
+                        <input  class="form-control" id="title" placeholder="问题标题">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">问题补充:</label><br>
+                        <textarea name="description" id="description"  class="form-control" rows="10"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="button" value="上传附件" class="btn btn-default">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tag">添加标签</label>
+                        <input  class="form-control" id="tag" name="tag" placeholder="问题标签(以,分割)">
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> 匿名
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        发布问题
+                    </button>
+                </form>
+
+
+
+
+
+            </div>
+
+            <!--列表区-->
+            <div class="col-md-3">
+                <h3>问题发起指南 <small>注意主题</small></h3>
+                <ul  class="list-group">
+                    <li class="list-group-item">问题标题:请用简介的语言描述您发布的问题,不超过25个字</li>
+                    <li class="list-group-item">问题补充:详细补充您的问题内容,并确保问题描述清晰直观,并提供一些相关资料</li>
+                    <li class="list-group-item">选择标签:选择一个或多个合适的标签,用逗号隔开,每个标签不超过十个字</li>
+                </ul>
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
 
 </div>
+
 
 
 

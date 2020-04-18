@@ -9,7 +9,7 @@ import org.zyx.repository.UserRepository;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-/**
+/**主页请求
  * Created by SunShine on 2020/4/15.
  */
 @Controller
@@ -23,18 +23,22 @@ public class IndexHandler {
     public String index(HttpServletRequest request){
 
         Cookie cookies[]=request.getCookies();
-
-        for(Cookie cookie : cookies){
-            if("token".equals(cookie.getName())){
-                String token=cookie.getValue();
-                User user = userRepository.findByToken(token);
-                if(user!=null){
-                    System.out.println(user);
-                    request.getSession().setAttribute("user",user);
+        if(cookies==null){
+            System.out.println("cookie为空");
+        }else{
+            for(Cookie cookie : cookies){
+                if("token".equals(cookie.getName())){
+                    String token=cookie.getValue();
+                    User user = userRepository.findByToken(token);
+                    if(user!=null){
+                        System.out.println(user);
+                        request.getSession().setAttribute("user",user);
+                    }
+                    break;
                 }
-                break;
             }
         }
+
         return "index";
     }
 
