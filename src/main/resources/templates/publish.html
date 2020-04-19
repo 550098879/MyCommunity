@@ -55,6 +55,11 @@
                             登录
                         </a>
                     </li>
+
+                    <li class="dropdown" th:if="${session.user!=null}">
+                        <img width="40px" height="40px" class="img-circle" th:src="${session.user.getAvatar_url()}" th:alt="${session.user.getName()}">
+                    </li>
+
                     <li class="dropdown" th:if="${session.user!=null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i th:text="${session.user.getName()}"></i><span class="caret"></span>
@@ -101,23 +106,23 @@
                         <input  class="form-control" id="tags" name="tags" placeholder="问题标签(以,分割)" th:value="${tags}">
                     </div>
 
+                    <button type="submit" class="btn btn-success">
+                        发布问题
+                    </button>
+
                     <span class="alert alert-success" role="alert" th:if="${success!=null}" th:text="${success}"></span>
                     <span class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}"></span>
 
-                    <button type="submit" class="btn btn-success" style="float: right;">
-                        发布问题
-                    </button>
+
+
                 </form>
-
-
-
-
-
 
             </div>
 
+
             <!--列表区-->
             <div class="col-md-3">
+
                 <h3>问题发起指南 <small>注意主题</small></h3>
                 <ul  class="list-group">
                     <li class="list-group-item">问题标题:请用简介的语言描述您发布的问题,不超过25个字</li>

@@ -2,8 +2,11 @@ package org.zyx.repository;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import org.zyx.entity.Question;
+
+import java.util.List;
 
 /**
  * Created by SunShine on 2020/4/19.
@@ -16,6 +19,8 @@ public interface QuestionRepository {
             "values(#{title},#{discription},#{gmt_create},#{gmt_modified},#{creater_id},#{tags})")
     int sendQuestion(Question question);
 
+    @Select("select * from question")
+    List<Question> findQuestion(Integer currentPage,Integer count);
 
 
 }

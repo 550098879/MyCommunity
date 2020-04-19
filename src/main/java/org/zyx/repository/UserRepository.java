@@ -21,10 +21,11 @@ public interface UserRepository {
     @Select("select * from user")
     List<User> findAll();
 
-    User findById(Integer id);
+    @Select("select * from user where id=#{id}")
+    User findById(Long id);
 
-    @Insert("insert into user(account_id,name,token,gmt_create,gmt_modified,bio) " +
-            "values(#{account_id},#{name},#{token},#{gmt_create},#{gmt_modified},#{bio})")
+    @Insert("insert into user(account_id,name,token,gmt_create,gmt_modified,bio,avatar_url) " +
+            "values(#{account_id},#{name},#{token},#{gmt_create},#{gmt_modified},#{bio},#{avatar_url})")
     void insert(User user);
     void update(User user);
     void deleteById(Integer id);

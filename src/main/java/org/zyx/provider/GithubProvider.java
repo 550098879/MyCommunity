@@ -55,6 +55,7 @@ public class GithubProvider {
         try {
 //            出现connection reset 则对网络进行重启即可
             Response response = client.newCall(request).execute();
+            System.out.println(response);
             String str=response.body().string();
             GithubUser githubUser = JSON.parseObject(str, GithubUser.class);
             return githubUser;

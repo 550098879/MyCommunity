@@ -23,4 +23,6 @@ public class Question {
     private Long like_count;
     private String tags;
 
+    private User user;
+
 }
