@@ -148,6 +148,20 @@ https://github.com/login/oauth/authorize?client_id=客户编号&redirect_uri=回
 mvn flyway:migrate 命令即可
 
 
+##BootStrap
+1.栅格布局方式(分为12格,响应式布局)
+```html
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-md-9">  
+      <div class="col-md-3">
+  </div>
+</div>
+
+```
+  
+2.iframe的后续可利用性,减少页面的跳转
+
 
 
    
