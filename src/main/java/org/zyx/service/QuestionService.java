@@ -1,15 +1,12 @@
 package org.zyx.service;
 
-import org.springframework.stereotype.Service;
-import org.zyx.entity.Question;
-
-import java.util.List;
+import org.zyx.entity.PagingData;
 
 /**
  * Created by SunShine on 2020/4/19.
  */
 public interface QuestionService {
 
-    List<Question> findQuestion(Integer currentPage,Integer count);
+    PagingData findQuestion(Integer currentPage, Integer count);
 
 }
