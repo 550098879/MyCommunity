@@ -29,7 +29,7 @@ public class IndexHandler {
 //    @RequestParam(name="name", required=false, defaultValue="World") String name, Model model
     public String index(HttpServletRequest request,
                         @RequestParam(name="currentPage", required=false, defaultValue="1") Integer currentPage,
-                        @RequestParam(name="count", required=false, defaultValue="2") Integer count){
+                        @RequestParam(name="count", required=false, defaultValue="5") Integer count){
 
         //处理自动登录功能
         Cookie cookies[]=request.getCookies();

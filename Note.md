@@ -167,6 +167,17 @@ mvn flyway:migrate 命令即可
 2.加载静态资源时,不许要添加static文件的路径,直接添加 images/xxx.jpg即可
 
 
+###Thymeleaf  
+1.代码复制功能
+```html
+<!-- 新建一个nav.html网页 只留下基础的网页网页元素-->
+<div th:fragment="nav">
+    <!--要被复制的代码-->
+</div>
 
-   
+<div th:include="nav.html :: nav">
+    <!--引入代码,nav是需要对应的-->
+</div>
+
+```
    
