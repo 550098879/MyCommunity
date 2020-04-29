@@ -68,6 +68,9 @@ public class AuthorizeController {
             user.setGmt_modified(user.getGmt_create());
             user.setBio(Guser.getBio());
             user.setAvatar_url(Guser.getAvatar_url());
+
+            System.out.println(user);
+
             userRepository.insert(user);//存储进数据库中
             //将token设置到cookie中,而不是直接设置到session中
             response.addCookie(new Cookie("token",token));

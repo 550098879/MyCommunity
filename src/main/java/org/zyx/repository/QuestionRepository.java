@@ -26,4 +26,13 @@ public interface QuestionRepository {
 
     @Select("select count(1) from question")
     Integer findCount();
+
+    @Select("select * from question where creater_id=#{param1} limit #{param2} , #{param3}")
+    List<Question> MyQuestions(Long id, Integer currentPage, Integer count);
+
+    @Select("select count(1) from question where id=#{user_id}")
+    Integer findCountByUid(Long user_id);
+
+    @Select("select * from question where id=#{id}")
+    Question findById(int id);
 }

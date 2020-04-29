@@ -1,0 +1,15 @@
+body{
+    /*https://api.btstu.cn/sjbz/api.php?lx=dongman&format=images*/
+    background: url(/images/bg.jpg) fixed;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.container{
+    background: white;
+    opacity: 0.8;
+}
+
+.community-menu{
+    color: #999;
+    font-size: 13px;
+}

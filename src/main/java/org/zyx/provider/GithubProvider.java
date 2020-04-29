@@ -33,7 +33,6 @@ public class GithubProvider {
         try {
             try (Response response = client.newCall(request).execute()) {
                 String str=response.body().string();//此处类似流操作,只能执行一次
-                System.out.println(str);
                 str=str.split("&")[0].split("=")[1];
                 System.out.println(str);
 

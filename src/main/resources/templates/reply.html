@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${sectionName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/project.css">
+
+</head>
+<body>
+
+
+<!--导航栏-->
+<div th:include="navigation :: nav"></div>
+<!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
+
+
+<div style="width:90%;margin: 0 auto;" class="container">
+
+    <!--主面板-->
+
+    <div class="container-fluid" style="margin:30px;">
+        <div class="row">
+            <!--个人中心-->
+            <div class="col-md-9">
+                <h2 th:text="${sectionName}"></h2>
+                <hr>
+
+
+                <!--分页-->
+            </div>
+
+            <!--列表区-->
+            <div class="col-md-3">
+                <div class="list-group">
+
+                    <a href="/profile/questions" class="list-group-item" th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item'">
+                        我的问题
+                        <span class="badge" th:text="${session.myQuestion.getQuestionList().size()}"></span>
+                    </a>
+                    <a href="/profile/reply" class="list-group-item" th:class="${section=='reply'} ? 'list-group-item active' : 'list-group-item'">
+                        最新回复
+                        <span class="badge">15</span>
+                    </a>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

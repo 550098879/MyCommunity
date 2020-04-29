@@ -39,5 +39,32 @@ public class QuestionServiceImpl implements QuestionService{
         return pagingData;
     }
 
+    @Override
+    public PagingData findMyQuestion(Long user_id, Integer currentPage, Integer count) {
+
+        PagingData pagingData = new PagingData();
+
+        List<Question> questionList=questionRepository.MyQuestions(user_id,(currentPage-1)*count,count);
+        for (Question question: questionList) {
+            Long creater_id=question.getCreater_id();
+            question.setUser(userRepository.findById(creater_id));
+        }
+        pagingData.setQuestionList(questionList);//设置问题列表
+
+        Integer totalCount=questionRepository.findCountByUid(user_id);
+
+        pagingData.setPagination(totalCount,currentPage,count);
+
+        return pagingData;
+
+    }
+
+    @Override
+    public Question getById(int id) {
+        Question question = questionRepository.findById(id);
+        question.setUser(userRepository.findById(question.getCreater_id()));
+        return question;
+    }
+
 
 }

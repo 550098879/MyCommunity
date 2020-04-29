@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.zyx.entity.Question;
 import org.zyx.entity.User;
 import org.zyx.repository.QuestionRepository;
+import org.zyx.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,9 +21,20 @@ public class PublishController {
 
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private QuestionService questionService;
+
 
     @GetMapping("/publish")
     public String publish(){
+        return "publish";
+    }
+
+
+    @GetMapping("/publish/{id}")
+    public String publish(@PathVariable("id") int id,Model model){
+        Question question = questionService.getById(id);
+        model.addAttribute("question",question);
         return "publish";
     }
 

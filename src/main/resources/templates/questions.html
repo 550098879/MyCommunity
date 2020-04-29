@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>刈剑丶社区</title>
+    <title th:text="${sectionName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <script src="/js/jquery-3.2.1.min.js"></script>
@@ -13,9 +13,9 @@
 <body>
 
 
-    <!--导航栏-->
-    <div th:include="navigation :: nav"></div>
-    <!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
+<!--导航栏-->
+<div th:include="navigation :: nav"></div>
+<!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
 
 
 <div style="width:90%;margin: 0 auto;" class="container">
@@ -24,14 +24,12 @@
 
     <div class="container-fluid" style="margin:30px;">
         <div class="row">
-            <!--问题显示区-->
+            <!--个人中心-->
             <div class="col-md-9">
-                <h2>
-                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现
-                </h2>
+                <h2 th:text="${sectionName}"></h2>
                 <hr>
-
-                <div class="media" th:each="question:${session.pagingData.getQuestionList()}">
+                <!--我的问题列表-->
+                <div class="media" th:each="question:${session.myQuestion.getQuestionList()}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-circle" width="64px" height="64px"
@@ -39,8 +37,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <!--标题-->
-                        <h4 class="media-heading" > <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a></h4>
+                        <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
 
                         <div th:text="${question.getDiscription()}"></div>
                         <div th:text="${question.getComment_count()}+'个评论··'+${question.getView_count()}+'次浏览··'+
@@ -49,31 +46,32 @@
                     <hr>
                 </div>
 
+                <!--分页-->
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
-                        <li th:if="${session.pagingData.isShowFirstPage()}">
-                            <a th:href="'/?currentPage=1'" aria-label="Previous">
+                        <li th:if="${session.myQuestion.isShowFirstPage()}">
+                            <a th:href="'/profile/questions?currentPage=1'" aria-label="Previous">
                                 <span aria-hidden="false">&laquo;</span>
                             </a>
                         </li>
-                        <li th:if="${session.pagingData.isShowLast()}">
-                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()-1}" >
+                        <li th:if="${session.myQuestion.isShowLast()}">
+                            <a th:href="'/profile/questions?currentPage='+${session.myQuestion.getCurrentPage()-1}" >
                                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                             </a>
                         </li>
 
-                        <li th:each="num : ${session.pagingData.getPages()}" th:class="${session.pagingData.getCurrentPage()==num}?'active' : ''">
-                            <a  th:text="${num}" th:href="'/?currentPage='+${num}"></a>
+                        <li th:each="num : ${session.myQuestion.getPages()}" th:class="${session.myQuestion.getCurrentPage()==num}?'active' : ''">
+                            <a  th:text="${num}" th:href="'/profile/questions?currentPage='+${num}"></a>
                         </li>
-                        <li th:if="${session.pagingData.isShowNext()}">
-                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()+1}" >
+                        <li th:if="${session.myQuestion.isShowNext()}">
+                            <a th:href="'/profile/questions?currentPage='+${session.myQuestion.getCurrentPage()+1}" >
                                 <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
                             </a>
                         </li>
 
 
-                        <li th:if="${session.pagingData.isShowEndPage()}">
-                            <a th:href="'/?currentPage='+${session.pagingData.getPageCount()}" aria-label="Next">
+                        <li th:if="${session.myQuestion.isShowEndPage()}">
+                            <a th:href="'/profile/questions?currentPage='+${session.myQuestion.getPageCount()}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -83,10 +81,19 @@
 
             </div>
 
-
             <!--列表区-->
             <div class="col-md-3">
-                热门主题
+                <div class="list-group">
+
+                    <a href="/profile/questions" class="list-group-item" th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item'">
+                        我的问题
+                        <span class="badge" th:text="${session.myQuestion.getQuestionList().size()}"></span>
+                    </a>
+                    <a href="/profile/reply" class="list-group-item" th:class="${section=='reply'} ? 'list-group-item active' : 'list-group-item'">
+                        最新回复
+                        <span class="badge">15</span>
+                    </a>
+                </div>
 
             </div>
 
