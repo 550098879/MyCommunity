@@ -66,5 +66,24 @@ public class QuestionServiceImpl implements QuestionService{
         return question;
     }
 
+    @Override
+    public int createOrUpdate(Question question) {
+
+        int count=0;
+
+        if (question.getId() == null){
+            //创建
+            question.setGmt_create(System.currentTimeMillis());
+            question.setGmt_modified(System.currentTimeMillis());
+            count = questionRepository.sendQuestion(question);
+        }else{
+            //更新
+            question.setGmt_modified(System.currentTimeMillis());
+            questionRepository.updateById(question);
+        }
+
+        return count;
+    }
+
 
 }

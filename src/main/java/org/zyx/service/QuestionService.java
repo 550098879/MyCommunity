@@ -13,4 +13,6 @@ public interface QuestionService {
     PagingData findMyQuestion(Long id, Integer currentPage, Integer count);
 
     Question getById(int id);
+
+    int createOrUpdate(Question question);
 }

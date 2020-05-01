@@ -40,7 +40,7 @@ public class PagingData {
             }else{
                 pages.add(i);
             }
-            if(i==pageCount){
+            if(i==pageCount || pageCount==0){
                 break;
             }
 

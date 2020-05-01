@@ -10,6 +10,7 @@ import org.zyx.entity.GithubUser;
 import org.zyx.entity.User;
 import org.zyx.provider.GithubProvider;
 import org.zyx.repository.UserRepository;
+import org.zyx.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,9 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+
 
     @Value("${github.client.id}")
     private String clientId;
@@ -63,15 +67,13 @@ public class AuthorizeController {
             user.setToken(token);//随机唯一id
             user.setName(Guser.getName());
             user.setAccount_id(String.valueOf(Guser.getId()));//强制转换
-//            user.setGmt_create(new Date().getTime());
-            user.setGmt_create(System.currentTimeMillis());//当前毫秒数
-            user.setGmt_modified(user.getGmt_create());
             user.setBio(Guser.getBio());
             user.setAvatar_url(Guser.getAvatar_url());
 
-            System.out.println(user);
+            userService.createOrUpdate(user);//创建或更新
 
-            userRepository.insert(user);//存储进数据库中
+
+//            userRepository.insert(user);//存储进数据库中
             //将token设置到cookie中,而不是直接设置到session中
             response.addCookie(new Cookie("token",token));
 
@@ -86,6 +88,18 @@ public class AuthorizeController {
         return "redirect:/";//请求转发
     }
 
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session,HttpServletResponse response){
+
+        session.removeAttribute("user");
+//        重置token的cookie
+        Cookie token = new Cookie("token", null);
+        token.setMaxAge(0);
+        response.addCookie(token);
+
+        return "redirect:/";
+    }
 
 
 }

@@ -1,9 +1,6 @@
 package org.zyx.repository;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.zyx.entity.Question;
 
@@ -35,4 +32,7 @@ public interface QuestionRepository {
 
     @Select("select * from question where id=#{id}")
     Question findById(int id);
+
+    @Update("update question set title=#{title},discription=#{discription},gmt_modified=#{gmt_modified},tags=#{tags} where id = #{id}")
+    void updateById(Question question);
 }

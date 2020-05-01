@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
     private QuestionService questionService;
 
 
@@ -34,7 +32,11 @@ public class PublishController {
     @GetMapping("/publish/{id}")
     public String publish(@PathVariable("id") int id,Model model){
         Question question = questionService.getById(id);
-        model.addAttribute("question",question);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("discription",question.getDiscription());
+        model.addAttribute("tags",question.getTags());
+        model.addAttribute("id",id);
+
         return "publish";
     }
 
@@ -42,8 +44,9 @@ public class PublishController {
     public String doPublish(Question question, HttpServletRequest request, Model model){
 
         model.addAttribute("title",question.getTitle());
-        model.addAttribute("tags",question.getTags());
         model.addAttribute("discription",question.getDiscription());
+        model.addAttribute("tags",question.getTags());
+        model.addAttribute("id",question.getId());
 
         User user= (User) request.getSession().getAttribute("user");
 
@@ -66,18 +69,17 @@ public class PublishController {
         }
 
         question.setCreater_id(user.getId());
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modified(System.currentTimeMillis());
+
         //数据持久化
-        if(questionRepository.sendQuestion(question)>0){
+        if(questionService.createOrUpdate(question)>0){
             model.addAttribute("success","问题发布成功,回到主页即可看到您的问题哦");
         }else{
-            model.addAttribute("error","问题发布失败,请检查问题是否存在少填信息");
+            model.addAttribute("success","问题更新成功");
         }
-        System.out.println(question);
-
 
         return "publish";
     }
+
+
 
 }

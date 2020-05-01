@@ -43,11 +43,12 @@
                 <hr>
 
                 <div class="col-md-12">
-                    <a th:href="@{'/publish/'+${question.id} }" th:if="${question.creater_id == session.user.getId()}" class="community-menu">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        编辑
-                    </a>
-
+                    <div th:if="${session.user != null}">
+                        <a th:href="@{'/publish/'+${question.id} }" th:if="${question.creater_id == session.user.getId()}" class="community-menu">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            编辑
+                        </a>
+                    </div>
 
                 </div>
 
