@@ -6,9 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.zyx.entity.Question;
-import org.zyx.entity.User;
-import org.zyx.repository.QuestionRepository;
+import org.zyx.entity.QuestionModel;
+import org.zyx.model.User;
 import org.zyx.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,7 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String publish(@PathVariable("id") int id,Model model){
-        Question question = questionService.getById(id);
+        QuestionModel question = questionService.getById(id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("discription",question.getDiscription());
         model.addAttribute("tags",question.getTags());
@@ -41,7 +40,7 @@ public class PublishController {
     }
 
     @PostMapping("/doPublish")
-    public String doPublish(Question question, HttpServletRequest request, Model model){
+    public String doPublish(QuestionModel question, HttpServletRequest request, Model model){
 
         model.addAttribute("title",question.getTitle());
         model.addAttribute("discription",question.getDiscription());
@@ -68,7 +67,7 @@ public class PublishController {
             return "publish";
         }
 
-        question.setCreater_id(user.getId());
+        question.setCreaterId((long)user.getId());
 
         //数据持久化
         if(questionService.createOrUpdate(question)>0){

@@ -1,6 +1,6 @@
 package org.zyx.service;
 
-import org.zyx.entity.User;
+import org.zyx.model.User;
 
 /**
  * Created by SunShine on 2020/4/29.

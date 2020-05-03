@@ -127,7 +127,6 @@
 
 			<!--Mybatis Generator 逆向工程-->
 			<!--mvn mybatis-generator:generate-->
-			<!--mvn -Dmybatis.generator.overwrite = true mybatis-generator：generate-->
 			<plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>

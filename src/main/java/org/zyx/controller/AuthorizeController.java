@@ -7,16 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zyx.entity.AccessTokenDTO;
 import org.zyx.entity.GithubUser;
-import org.zyx.entity.User;
+import org.zyx.model.User;
 import org.zyx.provider.GithubProvider;
-import org.zyx.repository.UserRepository;
+import org.zyx.repository.UserMapper;
 import org.zyx.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.UUID;
 
 /**GitHub认证
@@ -29,7 +28,7 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
     @Autowired
     private UserService userService;
 
@@ -66,9 +65,9 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);//随机唯一id
             user.setName(Guser.getName());
-            user.setAccount_id(String.valueOf(Guser.getId()));//强制转换
+            user.setAccountId(String.valueOf(Guser.getId()));//强制转换
             user.setBio(Guser.getBio());
-            user.setAvatar_url(Guser.getAvatar_url());
+            user.setAvatarUrl(Guser.getAvatar_url());
 
             userService.createOrUpdate(user);//创建或更新
 

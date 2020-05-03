@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PagingData {
 
-    private List<Question> questionList;
+    private List<QuestionModel> questionList;
 
     private Integer pageCount;
     private Integer currentPage;

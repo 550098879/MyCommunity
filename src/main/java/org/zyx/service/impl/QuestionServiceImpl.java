@@ -1,13 +1,18 @@
 package org.zyx.service.impl;
 
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zyx.entity.PagingData;
-import org.zyx.entity.Question;
-import org.zyx.repository.QuestionRepository;
-import org.zyx.repository.UserRepository;
+import org.zyx.entity.QuestionModel;
+import org.zyx.model.Question;
+import org.zyx.model.QuestionExample;
+import org.zyx.repository.QuestionMapper;
+import org.zyx.repository.UserMapper;
 import org.zyx.service.QuestionService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,22 +22,28 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService{
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionMapper questionMapper ;
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper ;
 
     @Override
     public PagingData findQuestion(Integer currentPage, Integer count) {
 
         PagingData pagingData = new PagingData();
-        List<Question> questionList=questionRepository.findQuestion((currentPage-1)*count,count);
-        for (Question question: questionList) {
-            Long creater_id=question.getCreater_id();
-            question.setUser(userRepository.findById(creater_id));
-        }
-        pagingData.setQuestionList(questionList);//设置问题列表
+        List<QuestionModel> questionModels=new ArrayList<>();
+        List<Question> questionList=questionMapper
+                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds(currentPage,count));
 
-        Integer totalCount=questionRepository.findCount();
+        for (Question question: questionList) {
+            long creater_id=question.getCreaterId();
+            QuestionModel questionModel = new QuestionModel();
+            BeanUtils.copyProperties(question, questionModel);//属性复制
+            questionModel.setUser(userMapper.selectByPrimaryKey((int)creater_id));
+            questionModels.add(questionModel);
+        }
+        pagingData.setQuestionList(questionModels);//设置问题列表
+
+        Integer totalCount=(int)questionMapper.countByExample(new QuestionExample());
 
         pagingData.setPagination(totalCount,currentPage,count);
 
@@ -40,18 +51,26 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public PagingData findMyQuestion(Long user_id, Integer currentPage, Integer count) {
+    public PagingData findMyQuestion(int user_id, Integer currentPage, Integer count) {
 
         PagingData pagingData = new PagingData();
+        List<QuestionModel> questionModels=new ArrayList<>();
+        List<Question> questionList=questionMapper
+                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds(currentPage,count));
 
-        List<Question> questionList=questionRepository.MyQuestions(user_id,(currentPage-1)*count,count);
-        for (Question question: questionList) {
-            Long creater_id=question.getCreater_id();
-            question.setUser(userRepository.findById(creater_id));
+        for (Question question : questionList) {
+            long creater_id=question.getCreaterId();
+            QuestionModel questionModel = new QuestionModel();
+            BeanUtils.copyProperties(question, questionModel);//属性复制
+            System.out.println("");
+            questionModel.setUser(userMapper.selectByPrimaryKey((int)creater_id));
+            questionModels.add(questionModel);
         }
-        pagingData.setQuestionList(questionList);//设置问题列表
+        pagingData.setQuestionList(questionModels);//设置问题列表
 
-        Integer totalCount=questionRepository.findCountByUid(user_id);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria().andIdEqualTo((long)user_id);
+        Integer totalCount=(int)questionMapper.countByExample(example);
 
         pagingData.setPagination(totalCount,currentPage,count);
 
@@ -60,26 +79,35 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Question getById(int id) {
-        Question question = questionRepository.findById(id);
-        question.setUser(userRepository.findById(question.getCreater_id()));
-        return question;
+    public QuestionModel getById(int id) {
+        Question question = questionMapper.selectByPrimaryKey((long)id);
+        QuestionModel questionModel = new QuestionModel();
+        BeanUtils.copyProperties(question, questionModel);//属性复制
+        questionModel.setUser(userMapper.selectByPrimaryKey(Integer.parseInt(""+question.getCreaterId())));
+        return questionModel;
     }
 
     @Override
-    public int createOrUpdate(Question question) {
+    public int createOrUpdate(QuestionModel question) {
 
         int count=0;
 
         if (question.getId() == null){
             //创建
-            question.setGmt_create(System.currentTimeMillis());
-            question.setGmt_modified(System.currentTimeMillis());
-            count = questionRepository.sendQuestion(question);
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(System.currentTimeMillis());
+            count = questionMapper.insertSelective(question);
         }else{
             //更新
-            question.setGmt_modified(System.currentTimeMillis());
-            questionRepository.updateById(question);
+            Question update = new Question();
+            update.setGmtModified(System.currentTimeMillis());
+            update.setTitle(question.getTitle());
+            update.setDiscription(question.getDiscription());
+            update.setTags(question.getTags());
+
+            QuestionExample example = new QuestionExample();
+            example.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(update,example);
         }
 
         return count;

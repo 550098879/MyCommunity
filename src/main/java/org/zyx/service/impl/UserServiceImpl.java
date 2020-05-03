@@ -2,9 +2,12 @@ package org.zyx.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.zyx.entity.User;
-import org.zyx.repository.UserRepository;
+import org.zyx.model.User;
+import org.zyx.model.UserExample;
+import org.zyx.repository.UserMapper;
 import org.zyx.service.UserService;
+
+import java.util.List;
 
 /**
  * Created by SunShine on 2020/4/29.
@@ -13,26 +16,35 @@ import org.zyx.service.UserService;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper ;
 
     @Override
     public void createOrUpdate(User user) {
 
-        User dbUser = userRepository.findByAccountId(user.getAccount_id());
-
-        if(dbUser == null){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        List<User> userList = userMapper.selectByExample(userExample);
+        if(userList.size() == 0){
             //插入
-            user.setGmt_create(System.currentTimeMillis());//创建时间
-            user.setGmt_modified(user.getGmt_create());
-            userRepository.insert(user);
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insertSelective(user);
         }else{
-//            更新
-            dbUser.setGmt_modified(System.currentTimeMillis());//资料修改时间
-            dbUser.setAvatar_url(user.getAvatar_url());//更新头像
-            dbUser.setToken(user.getToken());//更新token
-            dbUser.setName(user.getName());
-            userRepository.update(dbUser);
+            //修改
+
+            User updateUser = new User();
+            updateUser.setGmtModified(System.currentTimeMillis());
+            updateUser.setAvatarUrl(user.getAvatarUrl());
+            updateUser.setName(user.getName());
+            updateUser.setToken(user.getToken());
+
+
+            UserExample example = new UserExample();
+            example.createCriteria().andIdEqualTo(userList.get(0).getId());
+            userMapper.updateByExampleSelective(updateUser, example);
         }
 
+
     }
+
 }

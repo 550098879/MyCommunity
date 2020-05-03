@@ -33,15 +33,15 @@
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-circle" width="64px" height="64px"
-                                 th:src="${question.user.getAvatar_url()}" th:alt="${question.user.getName()}">
+                                 th:src="${question.user.getAvatarUrl()}" th:alt="${question.user.getName()}">
                         </a>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
 
                         <div th:text="${question.getDiscription()}"></div>
-                        <div th:text="${question.getComment_count()}+'个评论··'+${question.getView_count()}+'次浏览··'+
-                        ${question.getLike_count()}+'关注··'+ ${#dates.format(question.getGmt_create(),'YYYY-MM-dd HH:mm')}"></div>
+                        <div th:text="${question.getCommentCount()}+'个评论··'+${question.getViewCount()}+'次浏览··'+
+                        ${question.getLikeCount()}+'关注··'+ ${#dates.format(question.getGmtCreate(),'YYYY-MM-dd HH:mm')}"></div>
                     </div>
                     <hr>
                 </div>

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.zyx.entity.Question;
+import org.zyx.entity.QuestionModel;
 import org.zyx.service.QuestionService;
 
 /**
@@ -20,7 +20,7 @@ public class QuestionHandler {
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") int id, Model model){
 
-        Question question = questionService.getById(id);
+        QuestionModel question = questionService.getById(id);
         model.addAttribute("question",question);
         return "questionInfo";
     }
