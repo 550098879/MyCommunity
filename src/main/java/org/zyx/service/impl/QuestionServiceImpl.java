@@ -4,6 +4,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zyx.exception.CustomizeErrorCode;
+import org.zyx.exception.CustomizeException;
 import org.zyx.entity.PagingData;
 import org.zyx.entity.QuestionModel;
 import org.zyx.model.Question;
@@ -81,6 +83,9 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public QuestionModel getById(int id) {
         Question question = questionMapper.selectByPrimaryKey((long)id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionModel questionModel = new QuestionModel();
         BeanUtils.copyProperties(question, questionModel);//属性复制
         questionModel.setUser(userMapper.selectByPrimaryKey(Integer.parseInt(""+question.getCreaterId())));
@@ -107,7 +112,9 @@ public class QuestionServiceImpl implements QuestionService{
 
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(update,example);
+            if(questionMapper.updateByExampleSelective(update,example) != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
 
         return count;

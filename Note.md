@@ -180,4 +180,78 @@ mvn flyway:migrate 命令即可
 </div>
 
 ```
+
+###枚举类  
+```java
+package org.zyx.exception;
+
+/** 错误码顶级接口,兼容不同类型的错误码枚举类
+ * Created by SunShine on 2020/5/3.
+ */
+public interface ICustomizeErrorCode {
+
+    String getMessage();
+
+}
+
+/** 枚举类
+ *  1.定义不同类型的ErrorCode
+ *  2.由于存在不同类型的错误信息,如用户,问题,系统等错误信息,会定义多种错误枚举类
+ *  3.枚举类定义的不是常量,而是对象,
+ *  4.私有构造实现无法在其他类创建对象,只能在本类创建对象
+ * Created by SunShine on 2020/5/3.
+ */
+public enum CustomizeErrorCode implements ICustomizeErrorCode{
+
+    /** 1.定义的对象,调用枚举类的私有方法,给message赋值
+     *  2.QUESTION_NOT_FOUND 不是常量,而是对象
+     *  3.message是需要的错误信息
+     *  4.执行顺序: 调用私有构造 -- 为message赋值 -- 在异常类中调用getMessage()方法获取错误信息
+     */
+    QUESTION_NOT_FOUND("问题已删除或不存在,请重试");
+
+    private String message;
+
+    CustomizeErrorCode(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+}
+
+
+/** 自定义异常类
+ * Created by SunShine on 2020/5/3.
+ */
+public class CustomizeException extends RuntimeException{
+
+    private String massage;
+    public CustomizeException(String msg){
+        this.massage=msg;
+    }
+
+    public CustomizeException(ICustomizeErrorCode errorCode){
+
+        /** 1.顶级接口参数
+         *  2.实质上是不同的枚举类的对象(实现了ICustomizeErrorCode错误码接口)
+         *  3.调用枚举类对象的getMessage()方法,获取错误信息
+         */
+        this.massage=errorCode.getMessage();
+    }
+
+    public String getMessage() {
+        return massage;
+    }
+}
+
+
+//在需要手动抛出异常时: 
+//throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);调用枚举类的固有对象
+
+
+```
    

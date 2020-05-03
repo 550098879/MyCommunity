@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>错误界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+
+</head>
+<body>
+
+    <div class="jumbotron" style="text-align: center;">
+        <h1>出错啦!!!</h1>
+        <p th:text="${errorMsg}">ERROR MASSAGE</p>
+        <p><a  class="btn btn-primary btn-lg" href="/" role="button">回到首页</a></p>
+    </div>
+
+
+</body>
+</html>
