@@ -7,7 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.zyx.exception.CustomizeException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.logging.Handler;
 
 /** 异常处理
  * Created by SunShine on 2020/5/3.
@@ -24,9 +23,12 @@ public class MyExceptionHandler {
         ModelAndView modelAndView = new ModelAndView("error");
 
         if(ex instanceof CustomizeException){
-            modelAndView.addObject("errorMsg",ex.getMessage());
+            /** 判断错误是否可以被自定义类处理,可以则显示自定义错误信息
+             *  此处调用错误类的getMessage()获取错误信息
+             */
+            modelAndView.addObject("message",ex.getMessage());
         }else{
-            modelAndView.addObject("errorMsg","太热了,服务器一边凉快去了!");
+            modelAndView.addObject("message","太热了,服务器一边凉快去了!");
         }
 
 

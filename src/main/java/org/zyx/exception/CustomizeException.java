@@ -6,8 +6,9 @@ package org.zyx.exception;
 public class CustomizeException extends RuntimeException{
 
     private String massage;
+
     public CustomizeException(String msg){
-        this.massage=msg;
+        this.massage = msg;
     }
 
     public CustomizeException(ICustomizeErrorCode errorCode){

@@ -22,9 +22,13 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode{
         this.message = message;
     }
 
-    @Override
+    @Override  //重写接口的方法
     public String getMessage() {
         return message;
     }
 
+    @Override
+    public String toString() {
+        return message;
+    }
 }
