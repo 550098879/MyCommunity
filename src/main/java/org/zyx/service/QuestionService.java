@@ -15,4 +15,5 @@ public interface QuestionService {
     QuestionModel getById(int id);
 
     int createOrUpdate(QuestionModel question);
+
 }

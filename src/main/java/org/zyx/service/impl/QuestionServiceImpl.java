@@ -108,7 +108,7 @@ public class QuestionServiceImpl implements QuestionService{
             update.setGmtModified(System.currentTimeMillis());
             update.setTitle(question.getTitle());
             update.setDiscription(question.getDiscription());
-            update.setTags(question.getTags());
+             update.setTags(question.getTags());
 
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());

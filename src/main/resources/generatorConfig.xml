@@ -7,6 +7,7 @@
     运行方法:
     1. mvn mybatis-generator:generate
     2. 如何覆盖原有的呢?
+      mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 
 -->
 
