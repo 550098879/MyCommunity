@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.zyx.entity.QuestionModel;
+import org.zyx.entity.QuestionDTO;
 import org.zyx.model.User;
 import org.zyx.service.QuestionService;
 
@@ -30,7 +30,7 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String publish(@PathVariable("id") int id,Model model){
-        QuestionModel question = questionService.getById(id);
+        QuestionDTO question = questionService.getById(id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("discription",question.getDiscription());
         model.addAttribute("tags",question.getTags());
@@ -40,7 +40,7 @@ public class PublishController {
     }
 
     @PostMapping("/doPublish")
-    public String doPublish(QuestionModel question, HttpServletRequest request, Model model){
+    public String doPublish(QuestionDTO question, HttpServletRequest request, Model model){
 
         model.addAttribute("title",question.getTitle());
         model.addAttribute("discription",question.getDiscription());

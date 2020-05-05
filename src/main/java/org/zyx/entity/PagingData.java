@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PagingData {
 
-    private List<QuestionModel> questionList;
+    private List<QuestionDTO> questionList;
 
     private Integer pageCount;
     private Integer currentPage;
@@ -43,37 +43,32 @@ public class PagingData {
             if(i==pageCount || pageCount==0){
                 break;
             }
-
         }
+//        System.out.println("总条数:"+totalCount+"当前页:"+currentPage+"总页数:"+pageCount+"页码:"+pages);
+
         //是否展示上一页
         if(currentPage == 1){
             showLast = false;
         }else{
             showLast = true;
         }
-
         //是否展示下一页
         if (currentPage == pageCount){
             showNext=false;
         }else{
             showNext=true;
         }
-
         //是否展示首页
         if(pages.contains(1)){//页码中包含第一页则不展示首页
             showFirstPage = false;
         }else{
             showFirstPage = true;
         }
-
         //是否展示尾页
         if(pages.contains(pageCount)){//页码中包含第一页则不展示首页
             showEndPage = false;
         }else{
             showEndPage = true;
         }
-
-
-
     }
 }

@@ -30,7 +30,7 @@ public class IndexHandler {
 
 
         //处理主页的问题数据
-        PagingData pagingData=questionService.findQuestion((currentPage-1)*count,count);
+        PagingData pagingData=questionService.findQuestion(currentPage,count);
         request.getSession().setAttribute("pagingData",pagingData);
 
         return "index";

@@ -3,7 +3,10 @@ package org.zyx.advice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.zyx.entity.ResultDTO;
+import org.zyx.exception.CustomizeErrorCode;
 import org.zyx.exception.CustomizeException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,37 +14,40 @@ import javax.servlet.http.HttpServletRequest;
 /** 异常处理
  * Created by SunShine on 2020/5/3.
  */
-
+@RestController
 @ControllerAdvice
 public class MyExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    ModelAndView handle(HttpServletRequest request, Throwable ex) {
+    Object handle(HttpServletRequest request, Throwable ex) {
 
-        HttpStatus status = getStatus(request);//错误状态
-
+        String contentType = request.getContentType();
         ModelAndView modelAndView = new ModelAndView("error");
-
-        if(ex instanceof CustomizeException){
-            /** 判断错误是否可以被自定义类处理,可以则显示自定义错误信息
-             *  此处调用错误类的getMessage()获取错误信息
-             */
-            modelAndView.addObject("message",ex.getMessage());
+        if ("application/json".equals(contentType)){
+            //返回json
+            if(ex instanceof CustomizeException){
+                return ResultDTO.errorOf((CustomizeException)ex);
+            }else{
+                return ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
+            }
         }else{
-            modelAndView.addObject("message","太热了,服务器一边凉快去了!");
+            //错误页面跳转
+            if(ex instanceof CustomizeException){
+                /** 判断错误是否可以被自定义类处理,可以则显示自定义错误信息
+                 *  此处调用错误类的getMessage()获取错误信息
+                 */
+                modelAndView.addObject("message",ex.getMessage());
+                return modelAndView;
+            }else{
+                return ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
+            }
+
         }
 
 
-        return modelAndView;
     }
 
-    private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        if (statusCode == null) {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return HttpStatus.valueOf(statusCode);
-    }
+
 
 
 }

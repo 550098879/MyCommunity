@@ -26,25 +26,23 @@ public class ProfileHandler {
     @GetMapping("/{action}")
     public String profile(@PathVariable("action") String action, Model model, HttpSession session,
                           @RequestParam(name="currentPage", required=false, defaultValue="1") Integer currentPage,
-                          @RequestParam(name="count", required=false, defaultValue="5") Integer count){
+                          @RequestParam(name="count", required=false, defaultValue="4") Integer count){
         //检测是否登陆
         User user= (User) session.getAttribute("user");
         if(user == null){
             return "redirect:/";
         }
-
         if("questions".equals(action)){
             model.addAttribute("section","questions");
             model.addAttribute("sectionName","我的问题");
 //            获取问题
-            PagingData myQuestion = questionService.findMyQuestion(user.getId(), (currentPage-1)*count, count);
+            PagingData myQuestion = questionService.findMyQuestion(user.getId(), currentPage, count);
             session.setAttribute("myQuestion",myQuestion);
 
         }else if("reply".equals(action)){
             model.addAttribute("section","reply");
             model.addAttribute("sectionName","最新回复");
         }
-
         return action;
     }
 

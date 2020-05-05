@@ -1,7 +1,7 @@
 package org.zyx.service;
 
 import org.zyx.entity.PagingData;
-import org.zyx.entity.QuestionModel;
+import org.zyx.entity.QuestionDTO;
 
 /**
  * Created by SunShine on 2020/4/19.
@@ -10,10 +10,10 @@ public interface QuestionService {
 
     PagingData findQuestion(Integer currentPage, Integer count);
 
-    PagingData findMyQuestion(int id, Integer currentPage, Integer count);
+    PagingData findMyQuestion(long id, Integer currentPage, Integer count);
 
-    QuestionModel getById(int id);
+    QuestionDTO getById(long id);
 
-    int createOrUpdate(QuestionModel question);
+    int createOrUpdate(QuestionDTO question);
 
 }

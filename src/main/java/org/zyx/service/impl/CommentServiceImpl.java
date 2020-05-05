@@ -1,0 +1,71 @@
+package org.zyx.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.zyx.entity.CommentDTO;
+import org.zyx.enums.CommentTypeEnum;
+import org.zyx.exception.CustomizeErrorCode;
+import org.zyx.exception.CustomizeException;
+import org.zyx.model.Comment;
+import org.zyx.model.Question;
+import org.zyx.repository.CommentMapper;
+import org.zyx.repository.QuestionExtMapper;
+import org.zyx.repository.QuestionMapper;
+import org.zyx.service.CommentService;
+
+/**
+ * Created by SunShine on 2020/5/4.
+ */
+@Service
+public class CommentServiceImpl implements CommentService{
+
+    @Autowired
+    private CommentMapper commentMapper;
+    @Autowired
+    private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
+
+    /**
+     *
+     * @param commentDTO 接收前端传来的回复参数
+     * @param userId     回复用户ID
+     */
+    @Override
+    public void insertComment(CommentDTO commentDTO,Long userId) {
+        //判断问题是否被删除,或不存在
+        if(commentDTO.getParentId() == null || commentDTO.getParentId() == 0){
+            throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
+        }
+        //判断评论类型是否存在
+        if(commentDTO.getType() == null || !CommentTypeEnum.isExist(commentDTO.getType())){
+            throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
+        }
+        if(commentDTO.getType() == CommentTypeEnum.COMMENT.getType()){
+            //回复评论
+            //通过parentId获取回复,parentId就是评论ID?
+            Comment dbcomment = commentMapper.selectByPrimaryKey(commentDTO.getParentId());
+            if(dbcomment == null){
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
+            }
+        }else{
+            //回复问题
+            Question question = questionMapper.selectByPrimaryKey(commentDTO.getParentId());
+            if(question == null){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+        }
+        Comment comment = new Comment();
+        comment.setParentId(commentDTO.getParentId());
+        comment.setContent(commentDTO.getContent());
+        comment.setType(commentDTO.getType());
+        comment.setGmtCreate(System.currentTimeMillis());
+        comment.setGmtModified(comment.getGmtCreate());
+        comment.setCommentId(userId);
+
+        commentMapper.insertSelective(comment);
+        questionExtMapper.incCommentCount(commentDTO.getParentId());   //增加评论数
+
+    }
+}

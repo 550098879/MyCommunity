@@ -16,13 +16,19 @@
     <result column="VIEW_COUNT" jdbcType="BIGINT" property="viewCount" />
     <result column="LIKE_COUNT" jdbcType="BIGINT" property="likeCount" />
     <result column="TAGS" jdbcType="VARCHAR" property="tags" />
+
   </resultMap>
 
-  <update id="incView" parameterType="Integer">
+  <update id="incView" parameterType="Long">
     update QUESTION
         SET VIEW_COUNT = (VIEW_COUNT+1)
     where ID = #{id}
   </update>
 
+  <update id="incCommentCount" parameterType="Long">
+    update QUESTION
+      SET COMMENT_COUNT = (COMMENT_COUNT+1)
+    where ID = #{id}
+  </update>
 
 </mapper>

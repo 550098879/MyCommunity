@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionExtMapper {
 
-    void incView(int id);
+    int incView(Long id);
+    int incCommentCount(Long id);
 
 }

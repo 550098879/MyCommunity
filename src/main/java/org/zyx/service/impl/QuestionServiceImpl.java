@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.zyx.exception.CustomizeErrorCode;
 import org.zyx.exception.CustomizeException;
 import org.zyx.entity.PagingData;
-import org.zyx.entity.QuestionModel;
+import org.zyx.entity.QuestionDTO;
 import org.zyx.model.Question;
 import org.zyx.model.QuestionExample;
 import org.zyx.repository.QuestionMapper;
@@ -32,46 +32,43 @@ public class QuestionServiceImpl implements QuestionService{
     public PagingData findQuestion(Integer currentPage, Integer count) {
 
         PagingData pagingData = new PagingData();
-        List<QuestionModel> questionModels=new ArrayList<>();
+        List<QuestionDTO> questionDTOS =new ArrayList<>();
         List<Question> questionList=questionMapper
-                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds(currentPage,count));
+                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds((currentPage-1)*count,count));
 
         for (Question question: questionList) {
             long creater_id=question.getCreaterId();
-            QuestionModel questionModel = new QuestionModel();
-            BeanUtils.copyProperties(question, questionModel);//属性复制
-            questionModel.setUser(userMapper.selectByPrimaryKey((int)creater_id));
-            questionModels.add(questionModel);
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);//属性复制
+            questionDTO.setUser(userMapper.selectByPrimaryKey(creater_id));
+            questionDTOS.add(questionDTO);
         }
-        pagingData.setQuestionList(questionModels);//设置问题列表
-
+        pagingData.setQuestionList(questionDTOS);//设置问题列表
         Integer totalCount=(int)questionMapper.countByExample(new QuestionExample());
-
         pagingData.setPagination(totalCount,currentPage,count);
 
         return pagingData;
     }
 
     @Override
-    public PagingData findMyQuestion(int user_id, Integer currentPage, Integer count) {
+    public PagingData findMyQuestion(long user_id, Integer currentPage, Integer count) {
 
         PagingData pagingData = new PagingData();
-        List<QuestionModel> questionModels=new ArrayList<>();
+        List<QuestionDTO> questionDTOS =new ArrayList<>();
         List<Question> questionList=questionMapper
-                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds(currentPage,count));
+                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds((currentPage-1)*count,count));
 
         for (Question question : questionList) {
             long creater_id=question.getCreaterId();
-            QuestionModel questionModel = new QuestionModel();
-            BeanUtils.copyProperties(question, questionModel);//属性复制
-            System.out.println("");
-            questionModel.setUser(userMapper.selectByPrimaryKey((int)creater_id));
-            questionModels.add(questionModel);
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);//属性复制
+            questionDTO.setUser(userMapper.selectByPrimaryKey(creater_id));
+            questionDTOS.add(questionDTO);
         }
-        pagingData.setQuestionList(questionModels);//设置问题列表
+        pagingData.setQuestionList(questionDTOS);//设置问题列表
 
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andIdEqualTo((long)user_id);
+        example.createCriteria().andCreaterIdEqualTo((long) user_id);
         Integer totalCount=(int)questionMapper.countByExample(example);
 
         pagingData.setPagination(totalCount,currentPage,count);
@@ -81,37 +78,43 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public QuestionModel getById(int id) {
-        Question question = questionMapper.selectByPrimaryKey((long)id);
+    public QuestionDTO getById(long id) {
+        Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
-        QuestionModel questionModel = new QuestionModel();
-        BeanUtils.copyProperties(question, questionModel);//属性复制
-        questionModel.setUser(userMapper.selectByPrimaryKey(Integer.parseInt(""+question.getCreaterId())));
-        return questionModel;
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);//属性复制
+        questionDTO.setUser(userMapper.selectByPrimaryKey(question.getCreaterId()));
+        return questionDTO;
     }
 
     @Override
-    public int createOrUpdate(QuestionModel question) {
+    public int createOrUpdate(QuestionDTO questionDTO) {
 
         int count=0;
 
-        if (question.getId() == null){
-            //创建
-            question.setGmtCreate(System.currentTimeMillis());
-            question.setGmtModified(System.currentTimeMillis());
-            count = questionMapper.insertSelective(question);
+        if (questionDTO.getId() == null){
+            //创建,参数是Question的对象,而不是QuestionModel(虽然也可以就是了,子类)
+            Question addPro=new Question();
+            addPro.setCreaterId(questionDTO.getCreaterId());
+            addPro.setGmtCreate(System.currentTimeMillis());
+            addPro.setGmtModified(System.currentTimeMillis());
+            addPro.setTitle(questionDTO.getTitle());
+            addPro.setDiscription(questionDTO.getDiscription());
+            addPro.setTags(questionDTO.getTags());
+            count = questionMapper.insertSelective(addPro);
+
         }else{
             //更新
             Question update = new Question();
             update.setGmtModified(System.currentTimeMillis());
-            update.setTitle(question.getTitle());
-            update.setDiscription(question.getDiscription());
-             update.setTags(question.getTags());
+            update.setTitle(questionDTO.getTitle());
+            update.setDiscription(questionDTO.getDiscription());
+            update.setTags(questionDTO.getTags());
 
             QuestionExample example = new QuestionExample();
-            example.createCriteria().andIdEqualTo(question.getId());
+            example.createCriteria().andIdEqualTo(questionDTO.getId());
             if(questionMapper.updateByExampleSelective(update,example) != 1){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }

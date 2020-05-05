@@ -10,5 +10,4 @@ CREATE TABLE question
     view_count BIGINT DEFAULT 0,
     like_count BIGINT DEFAULT 0,
     tags VARCHAR(256),
-    foreign key(id) references USER(id)  on update cascade
 );

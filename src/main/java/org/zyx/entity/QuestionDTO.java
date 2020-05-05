@@ -12,7 +12,7 @@ import org.zyx.model.User;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionModel extends Question{
+public class QuestionDTO extends Question{
 
     private User user;
 

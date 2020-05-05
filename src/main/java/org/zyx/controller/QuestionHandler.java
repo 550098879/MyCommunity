@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.zyx.entity.QuestionModel;
+import org.zyx.entity.QuestionDTO;
 import org.zyx.repository.QuestionExtMapper;
 import org.zyx.service.QuestionService;
 
@@ -21,9 +21,9 @@ public class QuestionHandler {
     private QuestionExtMapper questionExtMapper;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable("id") int id, Model model){
+    public String question(@PathVariable("id") long id, Model model){
 
-        QuestionModel question = questionService.getById(id);
+        QuestionDTO question = questionService.getById(id);
 //        累加阅读数
         questionExtMapper.incView(id);
 
