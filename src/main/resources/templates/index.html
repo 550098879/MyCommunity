@@ -40,7 +40,9 @@
                     </div>
                     <div class="media-body">
                         <!--标题-->
-                        <h4 class="media-heading" > <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a></h4>
+                        <h4 class="media-heading" >
+                            <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a>
+                        </h4>
 
                         <div th:text="${question.getDiscription()}"
                              style="width: 500px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">

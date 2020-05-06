@@ -2,6 +2,7 @@ package org.zyx.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zyx.entity.CommentDTO;
 import org.zyx.enums.CommentTypeEnum;
 import org.zyx.exception.CustomizeErrorCode;
@@ -27,12 +28,13 @@ public class CommentServiceImpl implements CommentService{
     private QuestionExtMapper questionExtMapper;
 
 
-    /**
+    /**@Transactional 将整个方法作为事务,失败则整体回滚
      *
      * @param commentDTO 接收前端传来的回复参数
      * @param userId     回复用户ID
      */
     @Override
+    @Transactional //事务功能
     public void insertComment(CommentDTO commentDTO,Long userId) {
         //判断问题是否被删除,或不存在
         if(commentDTO.getParentId() == null || commentDTO.getParentId() == 0){

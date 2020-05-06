@@ -12,6 +12,7 @@
 </head>
 <body>
 
+<!--我的问题界面-->
 
 <!--导航栏-->
 <div th:include="navigation :: nav"></div>
@@ -37,7 +38,9 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
+                        <h4 class="media-heading" >
+                            <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a>
+                        </h4>
 
                         <div th:text="${question.getDiscription()}"></div>
                         <span th:text="${question.getCommentCount()}+' 个评论  |  '+
@@ -89,7 +92,7 @@
 
                     <a href="/profile/questions" class="list-group-item" th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item'">
                         我的问题
-                        <span class="badge" th:text="${session.myQuestion.getQuestionList().size()}"></span>
+                        <span class="badge" th:text="${session.totleCount}"></span>
                     </a>
                     <a href="/profile/reply" class="list-group-item" th:class="${section=='reply'} ? 'list-group-item active' : 'list-group-item'">
                         最新回复

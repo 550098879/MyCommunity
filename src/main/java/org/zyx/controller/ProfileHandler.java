@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zyx.entity.PagingData;
+import org.zyx.model.QuestionExample;
 import org.zyx.model.User;
+import org.zyx.repository.QuestionMapper;
 import org.zyx.service.QuestionService;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +22,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/profile")
 public class ProfileHandler {
 
+    @Autowired
+    private QuestionMapper questionMapper;
     @Autowired
     private QuestionService questionService;
 
@@ -38,6 +42,7 @@ public class ProfileHandler {
 //            获取问题
             PagingData myQuestion = questionService.findMyQuestion(user.getId(), currentPage, count);
             session.setAttribute("myQuestion",myQuestion);
+            session.setAttribute("totleCount",questionMapper.countByExample(new QuestionExample()));
 
         }else if("reply".equals(action)){
             model.addAttribute("section","reply");

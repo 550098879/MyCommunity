@@ -257,4 +257,4 @@ public class CustomizeException extends RuntimeException{
 ```
 
 - 外键约束导致的引用完整性异常:是否只针对H2数据库?暂未可知,先删除外键约束完善功能
-   
+- @Transactional 将整个方法作为事务,失败则整体回滚   
