@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${question.getTitle()}"></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -28,37 +28,116 @@
             <div class="col-md-9">
                 <h2 th:text="${question.title}"></h2>
 
-                <span >刈剑丶社区 | 作者:
+                <span>刈剑丶社区 | 作者:
                     <a th:text="${question.user.getName()}" href="/"></a>
                 </span>
 
                 <span th:text="'  | 发布时间:  '+${#dates.format(question.getGmtCreate(),'YYYY-MM-dd HH:mm')}
                         +' | 阅读数: '+ ${question.getViewCount()}">
-
                 </span>
-
                 <hr>
-
-                问题描述:<br>  <span th:text="${question.discription}"></span>
+                <span th:text="${question.discription}"></span>
                 <hr>
 
                 <div class="col-md-12">
                     <div th:if="${session.user != null}">
-                        <a th:href="@{'/publish/'+${question.id} }" th:if="${question.createrId == session.user.getId()}" class="community-menu">
+                        <a th:href="@{'/publish/'+${question.id} }"
+                           th:if="${question.createrId == session.user.getId()}" class="community-menu">
                             <span class="glyphicon glyphicon-pencil"></span>
                             编辑
                         </a>
                     </div>
+                    <hr>
+                </div>
+
+                <!--评论列表-->
+                <h4 th:text="${question.getCommentCount()}+'个评论'"></h4>
+
+                <div style="height:100px; ">回复列表</div>
+
+                <div th:if="${session.user == null}" style="text-align: center;">
+                    注册或登录后才能执行评论操作
+                </div>
+
+                <div id="comment" th:if="${session.user != null}">
+                    <img th:src="${session.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
+                    <span th:text="${session.user.getName()}"></span>
+
+                    <!--异步刷新-->
+
+                    <textarea class="form-control" rows="6" style="margin:10px 0;" id="content"></textarea>
+                    <button type="button" class="btn btn-success"
+                            th:onclick="'javascript:insertComment('+${question.id}+',1'+')'"
+                            style="float:right;margin-bottom:10px;">
+                        回复
+                    </button>
 
                 </div>
 
+
+
+
+                <script>
+
+                    function insertComment(parentId, type) {
+
+                        var content = $("#content").val();
+
+                        if (content == "") {
+                            alert("评论内容不能为空");
+                            return;
+                        }
+                        $.ajax({
+                            type: "post",
+                            url: "/comment",
+                            dataType: "json",
+                            //发送json对象
+                            contentType: "application/json", //设置内容类型
+                            data: JSON.stringify({  //设置json对象参数
+                                "parentId": parentId,
+                                "type": type,
+                                "content": content,
+                            }),
+//                           data:{
+//                                //普通字段,不是json对象,服务器接收不需要@RequestBody注解,
+//                                   也不需要写contentType
+//                               "parentId":parentId,
+//                               "type":type,
+//                               "content":content,
+//                           },
+                            success: function (data) {
+                                console.log("返回的数据", data);
+                                if (data.code == 200) {
+                                    $("#comment").hide();//隐藏回复区
+                                    $("#content").val("");//清空文本域
+                                } else {
+                                    if(data.code == 2003){
+                                        if(confirm(data.message)){
+                                            //选择是否前往登陆
+                                            location.href="https://github.com/login/oauth/authorize?client_id=c675236053a463ef56cb&redirect_uri=http://localhost:7777/callback&scope=user&state=1";
+                                            window.localStorage.setItem("parentId",parentId);
+                                        }
+                                    }else{
+                                        alert(data.message);
+                                    }
+
+                                }
+                            },
+
+                        });
+
+
+                    }
+
+
+                </script>
 
             </div>
 
             <!--列表区-->
             <div class="col-md-3" style="margin-top:50px;">
                 <h4>发起人</h4>
-                <img  th:src="${question.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
+                <img th:src="${question.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
                 <a th:text="${question.user.getName()}"></a>
 
                 <hr>

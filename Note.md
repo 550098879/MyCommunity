@@ -258,3 +258,13 @@ public class CustomizeException extends RuntimeException{
 
 - 外键约束导致的引用完整性异常:是否只针对H2数据库?暂未可知,先删除外键约束完善功能
 - @Transactional 将整个方法作为事务,失败则整体回滚   
+
+
+
+###HTML Web  
+- window.localStorage 基于js的全局属性,类似session?  
+   window.localStorage.setItem("parentId",parentId); 设置属性 
+   window.localStorage.removeItem("parentId");       移除属性  
+   实现在问题页面登陆时回到原页面,也可以用于其他地方
+   
+

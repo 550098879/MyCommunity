@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/project.css">
 
+    <script type="application/javascript">
+
+//        debugger;//前端debug的方法
+        window.onload = function(){
+            //window.localStorage取出的值默认为String类型
+            let parentId = window.localStorage.getItem("parentId");
+            if(parentId !=null){
+                window.localStorage.removeItem("parentId");
+                location.href="/question/"+parentId;
+
+            }
+        }
+    </script>
 </head>
 <body>
 
