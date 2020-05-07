@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.zyx.entity.CommentDTO;
+import org.zyx.entity.CommentData;
 import org.zyx.entity.ResultDTO;
 import org.zyx.exception.CustomizeErrorCode;
 import org.zyx.model.Comment;
@@ -14,6 +15,8 @@ import org.zyx.repository.CommentMapper;
 import org.zyx.service.CommentService;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by SunShine on 2020/5/4.
@@ -34,17 +37,23 @@ public class CommentHandler {
      * @return
      */
     @PostMapping("/comment")
-    public Object comment(@RequestBody CommentDTO commentDTO, HttpSession session) {
+    public Object insertComment(@RequestBody CommentDTO commentDTO, HttpSession session) {
 
         System.out.println("测试" + commentDTO);
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
-
         commentService.insertComment(commentDTO, user.getId());
-
         return ResultDTO.okOf();
+    }
+
+    @GetMapping("/findComment/{parentId}/{type}")
+    public Collection<CommentData> findComment(@PathVariable("parentId") long parentId,@PathVariable("type") int type){
+
+        Collection<CommentData> commentDataList = commentService.findComment(parentId,type);
+
+        return commentDataList;
     }
 
 

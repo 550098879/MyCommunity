@@ -8,6 +8,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/project.css">
+    <script src="/js/project.js"></script>
 
 </head>
 <body>
@@ -24,9 +25,12 @@
 
     <div class="container-fluid" style="margin:30px;">
         <div class="row">
-            <!--个人中心-->
+            <!--问题详情-->
             <div class="col-md-9">
                 <h2 th:text="${question.title}"></h2>
+                <!--隐藏信息域(问题ID和评论类型)-->
+                <input type="hidden" id="questionId" th:value="${question.id}">
+                <input type="hidden" id="type" value="1">
 
                 <span>刈剑丶社区 | 作者:
                     <a th:text="${question.user.getName()}" href="/"></a>
@@ -46,15 +50,44 @@
                             <span class="glyphicon glyphicon-pencil"></span>
                             编辑
                         </a>
+                        <hr>
                     </div>
-                    <hr>
                 </div>
 
                 <!--评论列表-->
-                <h4 th:text="${question.getCommentCount()}+'个评论'"></h4>
+                <h3 th:text="${question.getCommentCount()}+'个回复'"></h3>
+                <hr>
 
-                <div style="height:100px; ">回复列表</div>
+                <!--这里是一整个回复-->
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object" th:src="${question.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
+                        </a>
+                    </div>
 
+                    <div class="media-body">
+                        <h4 class="media-heading" th:text="${question.user.getName()}"></h4>
+                        <p>我就路过一下</p>
+                        <div>
+                            <a class="btn btn-default" href="#" role="button">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                0           <!--点赞数-->
+                            </a>
+                            <a class="btn btn-default" href="#" role="button">
+                                <span class="glyphicon glyphicon-comment"  aria-hidden="true"></span>
+                                0            <!--评论数-->
+                            </a>
+                            <span  style="float: right;"
+                                    th:text="'回复时间:  '+${#dates.format(question.getGmtCreate(),'YYYY-MM-dd HH:mm')}">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--这里是一整个回复-->
+
+                <hr>
+                <!--评论区-->
                 <div th:if="${session.user == null}" style="text-align: center;">
                     注册或登录后才能执行评论操作
                 </div>
@@ -62,12 +95,11 @@
                 <div id="comment" th:if="${session.user != null}">
                     <img th:src="${session.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
                     <span th:text="${session.user.getName()}"></span>
-
                     <!--异步刷新-->
 
                     <textarea class="form-control" rows="6" style="margin:10px 0;" id="content"></textarea>
                     <button type="button" class="btn btn-success"
-                            th:onclick="'javascript:insertComment('+${question.id}+',1'+')'"
+                            onclick="insertComment()"
                             style="float:right;margin-bottom:10px;">
                         回复
                     </button>
@@ -75,62 +107,6 @@
                 </div>
 
 
-
-
-                <script>
-
-                    function insertComment(parentId, type) {
-
-                        var content = $("#content").val();
-
-                        if (content == "") {
-                            alert("评论内容不能为空");
-                            return;
-                        }
-                        $.ajax({
-                            type: "post",
-                            url: "/comment",
-                            dataType: "json",
-                            //发送json对象
-                            contentType: "application/json", //设置内容类型
-                            data: JSON.stringify({  //设置json对象参数
-                                "parentId": parentId,
-                                "type": type,
-                                "content": content,
-                            }),
-//                           data:{
-//                                //普通字段,不是json对象,服务器接收不需要@RequestBody注解,
-//                                   也不需要写contentType
-//                               "parentId":parentId,
-//                               "type":type,
-//                               "content":content,
-//                           },
-                            success: function (data) {
-                                console.log("返回的数据", data);
-                                if (data.code == 200) {
-                                    $("#comment").hide();//隐藏回复区
-                                    $("#content").val("");//清空文本域
-                                } else {
-                                    if(data.code == 2003){
-                                        if(confirm(data.message)){
-                                            //选择是否前往登陆
-                                            location.href="https://github.com/login/oauth/authorize?client_id=c675236053a463ef56cb&redirect_uri=http://localhost:7777/callback&scope=user&state=1";
-                                            window.localStorage.setItem("parentId",parentId);
-                                        }
-                                    }else{
-                                        alert(data.message);
-                                    }
-
-                                }
-                            },
-
-                        });
-
-
-                    }
-
-
-                </script>
 
             </div>
 

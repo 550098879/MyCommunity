@@ -28,7 +28,6 @@ public class IndexHandler {
                         @RequestParam(name="currentPage", required=false, defaultValue="1") Integer currentPage,
                         @RequestParam(name="count", required=false, defaultValue="5") Integer count){
 
-
         //处理主页的问题数据
         PagingData pagingData=questionService.findQuestion(currentPage,count);
         request.getSession().setAttribute("pagingData",pagingData);

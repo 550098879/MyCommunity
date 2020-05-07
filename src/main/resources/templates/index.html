@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>刈剑丶社区</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -11,13 +11,13 @@
 
     <script type="application/javascript">
 
-//        debugger;//前端debug的方法
-        window.onload = function(){
-            //window.localStorage取出的值默认为String类型
+        //        debugger;//前端debug的方法
+        window.onload = function () {
+            //window.localStorage取出的值默认为String类型(本地存储器)
             let parentId = window.localStorage.getItem("parentId");
-            if(parentId !=null){
+            if (parentId != null) {
                 window.localStorage.removeItem("parentId");
-                location.href="/question/"+parentId;
+                location.href = "/question/" + parentId;
 
             }
         }
@@ -26,9 +26,9 @@
 <body>
 
 
-    <!--导航栏-->
-    <div th:include="navigation :: nav"></div>
-    <!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
+<!--导航栏-->
+<div th:include="navigation :: nav"></div>
+<!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
 
 
 <div style="width:90%;margin: 0 auto;" class="container">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="media-body">
                         <!--标题-->
-                        <h4 class="media-heading" >
+                        <h4 class="media-heading">
                             <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a>
                         </h4>
 
@@ -63,7 +63,7 @@
                         <span th:text="${question.getCommentCount()}+' 个评论  |  '+
                                     ${question.getViewCount()}+' 次浏览  |  '+
                                     ${question.getLikeCount()}+' 关注  |'"></span>
-                         最后更新: <span th:text="${#dates.format(question.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
+                        最后更新: <span th:text="${#dates.format(question.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
                     </div>
                     <hr>
                 </div>
@@ -76,16 +76,17 @@
                             </a>
                         </li>
                         <li th:if="${session.pagingData.isShowLast()}">
-                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()-1}" >
+                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()-1}">
                                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                             </a>
                         </li>
 
-                        <li th:each="num : ${session.pagingData.getPages()}" th:class="${session.pagingData.getCurrentPage()==num}?'active' : ''">
-                            <a  th:text="${num}" th:href="'/?currentPage='+${num}"></a>
+                        <li th:each="num : ${session.pagingData.getPages()}"
+                            th:class="${session.pagingData.getCurrentPage()==num}?'active' : ''">
+                            <a th:text="${num}" th:href="'/?currentPage='+${num}"></a>
                         </li>
                         <li th:if="${session.pagingData.isShowNext()}">
-                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()+1}" >
+                            <a th:href="'/?currentPage='+${session.pagingData.getCurrentPage()+1}">
                                 <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
                             </a>
                         </li>
@@ -105,7 +106,7 @@
 
             <!--列表区-->
             <div class="col-md-3">
-               <h3>热门主题</h3>
+                <h3>热门主题</h3>
 
             </div>
 
