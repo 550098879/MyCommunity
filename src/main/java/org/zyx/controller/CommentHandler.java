@@ -1,5 +1,6 @@
 package org.zyx.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.zyx.entity.CommentDTO;
 import org.zyx.entity.CommentData;
 import org.zyx.entity.ResultDTO;
 import org.zyx.exception.CustomizeErrorCode;
+import org.zyx.exception.CustomizeException;
 import org.zyx.model.Comment;
 import org.zyx.model.User;
 import org.zyx.repository.CommentMapper;
@@ -44,6 +46,11 @@ public class CommentHandler {
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
+        if(StringUtils.isBlank(commentDTO.getContent())){//判断字符串是否为空或"",以去空格
+            return ResultDTO.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
+        }
+
+
         commentService.insertComment(commentDTO, user.getId());
         return ResultDTO.okOf();
     }

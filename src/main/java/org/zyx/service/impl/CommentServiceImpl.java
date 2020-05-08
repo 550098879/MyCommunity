@@ -86,10 +86,13 @@ public class CommentServiceImpl implements CommentService {
         List<CommentData> commentDataList = new ArrayList<>();
         CommentExample example = new CommentExample();
         example.createCriteria().andParentIdEqualTo(parentId).andTypeEqualTo(type);
+        example.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(example);
         for (Comment comment : comments) {
-            commentDataList.add(new CommentData(comment,userMapper.selectByPrimaryKey(comment.getCommentId())));
+            commentDataList.add(new CommentData(comment,userMapper.selectByPrimaryKey(comment.getCommentId()),commentMapper.countByExample(example)));
         }
+
+
         return commentDataList;
     }
 }

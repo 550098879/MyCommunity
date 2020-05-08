@@ -8,7 +8,22 @@ function findParentComment(){
     $.get('/findComment/'+parentId+'/1', function(data) {
         console.log("父级评论信息:",data);
         //怎么讲这些信息显示到界面上呢?
-
+        var html = "";
+        for(var i in data){
+            var item = data[i];
+            html+="<div class='media'><div class='media-left'><a href='#'>"+
+                "<img class='media-object' style='width:40px;height:40px;border-radius:5px;' src='"+item.user.avatarUrl+"'></a></div>"+
+                "<div class='media-body'><h4 class='media-heading'>"+item.user.name+"</h4><p>"+item.comment.content+"</p>"+   //这是回复的内容
+                "<div><a class='btn btn-default' href='#' role='button'>"+      //点赞按钮
+                "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>  "+item.comment.likeCount+
+                "</a><a class='btn btn-default' href='#' role='button'>"+       //评论按钮
+                "<span class='glyphicon glyphicon-comment'  aria-hidden='true'></span>  "+item.comment.likeCount+
+                "</a><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
+                "</span></div></div><hr></div>";
+        }
+        $("#result").html(html);
+        var commentCount =item.commentCount+"个回复";
+        $("#commentCount").html(commentCount);
     });
 }
 
@@ -25,12 +40,12 @@ function findPChildComment(parentId){
 
 
 
-//添加评论的ajax请求
+//回复问题的ajax请求
 function insertComment() {
     var parentId = $("#questionId").val();
     var type = $("#type").val();
     var content = $("#content").val();
-    if (content == "") {
+    if (!content) {
         alert("评论内容不能为空");
         return;
     }

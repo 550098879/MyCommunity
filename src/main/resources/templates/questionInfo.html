@@ -30,7 +30,7 @@
                 <h2 th:text="${question.title}"></h2>
                 <!--隐藏信息域(问题ID和评论类型)-->
                 <input type="hidden" id="questionId" th:value="${question.id}">
-                <input type="hidden" id="type" value="1">
+
 
                 <span>刈剑丶社区 | 作者:
                     <a th:text="${question.user.getName()}" href="/"></a>
@@ -43,7 +43,7 @@
                 <span th:text="${question.discription}"></span>
                 <hr>
 
-                <div class="col-md-12">
+                <div>
                     <div th:if="${session.user != null}">
                         <a th:href="@{'/publish/'+${question.id} }"
                            th:if="${question.createrId == session.user.getId()}" class="community-menu">
@@ -55,43 +55,25 @@
                 </div>
 
                 <!--评论列表-->
-                <h3 th:text="${question.getCommentCount()}+'个回复'"></h3>
+                <h3 id="commentCount"></h3>
                 <hr>
 
-                <!--这里是一整个回复-->
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object" th:src="${question.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
-                        </a>
-                    </div>
+                <div id="result">
 
-                    <div class="media-body">
-                        <h4 class="media-heading" th:text="${question.user.getName()}"></h4>
-                        <p>我就路过一下</p>
-                        <div>
-                            <a class="btn btn-default" href="#" role="button">
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                0           <!--点赞数-->
-                            </a>
-                            <a class="btn btn-default" href="#" role="button">
-                                <span class="glyphicon glyphicon-comment"  aria-hidden="true"></span>
-                                0            <!--评论数-->
-                            </a>
-                            <span  style="float: right;"
-                                    th:text="'回复时间:  '+${#dates.format(question.getGmtCreate(),'YYYY-MM-dd HH:mm')}">
-                            </span>
-                        </div>
-                    </div>
+                    <!--这里是一整个回复-->
+
+                    <!--这里是一整个回复-->
+
                 </div>
-                <!--这里是一整个回复-->
 
-                <hr>
+
+
                 <!--评论区-->
                 <div th:if="${session.user == null}" style="text-align: center;">
                     注册或登录后才能执行评论操作
                 </div>
-
+                <h4>提交回复</h4>
+                <hr>
                 <div id="comment" th:if="${session.user != null}">
                     <img th:src="${session.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
                     <span th:text="${session.user.getName()}"></span>
@@ -103,6 +85,7 @@
                             style="float:right;margin-bottom:10px;">
                         回复
                     </button>
+                    <input type="hidden" id="type" value="1">
 
                 </div>
 

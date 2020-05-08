@@ -15,4 +15,5 @@ import org.zyx.model.User;
 public class CommentData{
     private Comment comment;
     private User user;
+    private long commentCount;
 }
