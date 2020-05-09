@@ -14,12 +14,19 @@ function findParentComment(){
             html+="<div class='media'><div class='media-left'><a href='#'>"+
                 "<img class='media-object' style='width:40px;height:40px;border-radius:5px;' src='"+item.user.avatarUrl+"'></a></div>"+
                 "<div class='media-body'><h4 class='media-heading'>"+item.user.name+"</h4><p>"+item.comment.content+"</p>"+   //这是回复的内容
-                "<div><a class='btn btn-default' href='#' role='button'>"+      //点赞按钮
-                "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>  "+item.comment.likeCount+
-                "</a><a class='btn btn-default' href='#' role='button'>"+       //评论按钮
-                "<span class='glyphicon glyphicon-comment'  aria-hidden='true'></span>  "+item.comment.likeCount+
-                "</a><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
-                "</span></div></div><hr></div>";
+                "<div><a class='btn btn-default' role='button' onclick='like("+item.comment.id+")'>"+      //点赞按钮
+                "<span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span>  "+
+                  "<lable id='like-"+item.comment.id+"'>"+item.comment.likeCount+"</lable>"+
+                "</a><button class='btn btn-primary' data-target='#"+item.comment.id+"' type='button' data-toggle='collapse'"+
+                "aria-expanded='false' aria-controls='collapseExample' onclick='findPChildComment("+item.comment.id+")'>"+       //评论按钮
+                "<span class='glyphicon glyphicon-comment'  aria-hidden='true'></span>  "+item.comment.count+
+                "</button><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
+                "</span></div>"+
+                "<div class='collapse' id='"+item.comment.id+"'>"+
+                "<div class='well' id='comment-"+item.comment.id+"'>"+
+                //折叠窗口
+                "</div></div>"+
+                "</div><hr></div>";
         }
         $("#result").html(html);
         var commentCount =item.commentCount+"个回复";
@@ -31,8 +38,58 @@ function findParentComment(){
 function findPChildComment(parentId){
 
     $.get('/findComment/'+parentId+'/2', function(data) {
+        console.log("子评论:",data);
+        var id = "#comment-"+parentId;
+        // for(var i in data) {
+        //     var item = data[i];
+        //
+        //     var media = $("</div>",{
+        //         "class":'media',
+        //     }).append($("<img/>",{
+        //         "class":"media-object",
+        //         "style":'width:40px;height:40px;border-radius:5px;',
+        //         "src":item.user.avatarUrl,
+        //     })).append($("</div>",{
+        //         "class":'media-body',
+        //     })).append($("<h4>",{
+        //         "class":'media-heading',
+        //         "text":item.user.name,
+        //     })).append($("</span>",{
+        //         "style":'float: right;',
+        //         "text":new Date(item.comment.gmtModified).toLocaleString(),
+        //     }));
+        //
+        //     $(id).prepend(media);
+        // }
+        var childComment = "";
+        for(var i in data){
+            var item = data[i];
+            childComment+="<div class='media'><div class='media-left'><a href='#'>"+
+                "<img class='media-object' style='width:40px;height:40px;border-radius:5px;' src='"+item.user.avatarUrl+"'></a></div>"+
+                "<div class='media-body'><h4 class='media-heading'>"+item.user.name+"</h4>"+item.comment.content+   //这是回复的内容
+                "</a><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
+                "</span></div></div><hr></div>" ;
+
+        }
+        //评论区
+        childComment+="<div>"+
+                "<input class='form-control' placeholder='评论一下' id='childComment-"+parentId+"'>"+
+                "<input type='reset' value='取消' class='btn btn-default' style='float: right;'>"+
+                "<input type='button' value='评论' class='btn btn-success' style='float: right;'"+
+                " onclick='insertComment("+parentId+")'>"+
+                "</div>"
+
+        $(id).html(childComment);
+
+    });
 
 
+}
+
+function like(id){
+
+    $.get("/likeComment/"+id,function(data){
+        $("#like-"+id).html(data);
     });
 }
 
@@ -41,10 +98,18 @@ function findPChildComment(parentId){
 
 
 //回复问题的ajax请求
-function insertComment() {
+function insertComment(commentId) {
     var parentId = $("#questionId").val();
     var type = $("#type").val();
     var content = $("#content").val();
+
+    if(commentId != null){
+        parentId = commentId;
+        type = 2;
+        content = $("#childComment-"+commentId).val();
+    }
+
+
     if (!content) {
         alert("评论内容不能为空");
         return;
@@ -73,6 +138,12 @@ function insertComment() {
                 $("#comment").hide();//隐藏回复区
                 $("#content").val("");//清空文本域
                 findParentComment();//刷新评论信息
+
+                if(type == 2){
+
+                }
+
+
             } else {
                 if (data.code == 2003) {
                     if (confirm(data.message)) {

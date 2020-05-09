@@ -17,4 +17,6 @@ public interface CommentService {
      * @return
      */
     Collection<CommentData> findComment(long parentId, int type);
+
+    Long incLikeCount(long commentId);
 }

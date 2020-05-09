@@ -7,5 +7,6 @@ CREATE TABLE PUBLIC.comment
     gmt_create BIGINT NOT NULL,  /*评论时间*/
     gmt_modified BIGINT NOT NULL,/*更新时间*/
     like_count BIGINT DEFAULT 0,  /*点赞数*/
-    content varchar(1024)   /*评论内容*/
+    content varchar(1024),   /*评论内容*/
+    count BIGINT default 0   /*被回复次数*/
 );

@@ -63,5 +63,10 @@ public class CommentHandler {
         return commentDataList;
     }
 
+    @GetMapping("/likeComment/{commentId}")
+    public Long incLike(@PathVariable("commentId") long commentId){
+        return  commentService.incLikeCount(commentId);
+    }
+
 
 }

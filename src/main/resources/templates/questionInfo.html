@@ -43,6 +43,18 @@
                 <span th:text="${question.discription}"></span>
                 <hr>
 
+                <!--标签-->
+                <div style="margin-top: -15px;" >
+                    <span style="margin-left: 5px;"
+                            class="label label-info" th:each="tag : ${question.tags.split(',')}">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <span th:text="${tag}"></span>
+                    </span>
+
+                </div>
+
+
+                <hr>
                 <div>
                     <div th:if="${session.user != null}">
                         <a th:href="@{'/publish/'+${question.id} }"
@@ -59,10 +71,7 @@
                 <hr>
 
                 <div id="result">
-
-                    <!--这里是一整个回复-->
-
-                    <!--这里是一整个回复-->
+                    <!--这里是回复列表-->
 
                 </div>
 

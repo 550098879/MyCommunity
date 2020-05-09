@@ -33,8 +33,10 @@ public class QuestionServiceImpl implements QuestionService{
 
         PagingData pagingData = new PagingData();
         List<QuestionDTO> questionDTOS =new ArrayList<>();
+        QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_modified desc");
         List<Question> questionList=questionMapper
-                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds((currentPage-1)*count,count));
+                .selectByExampleWithBLOBsWithRowbounds(example,new RowBounds((currentPage-1)*count,count));
 
         for (Question question: questionList) {
             long creater_id=question.getCreaterId();

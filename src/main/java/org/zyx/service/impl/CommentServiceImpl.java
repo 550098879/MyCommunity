@@ -11,11 +11,7 @@ import org.zyx.exception.CustomizeException;
 import org.zyx.model.Comment;
 import org.zyx.model.CommentExample;
 import org.zyx.model.Question;
-import org.zyx.model.User;
-import org.zyx.repository.CommentMapper;
-import org.zyx.repository.QuestionExtMapper;
-import org.zyx.repository.QuestionMapper;
-import org.zyx.repository.UserMapper;
+import org.zyx.repository.*;
 import org.zyx.service.CommentService;
 
 import java.util.ArrayList;
@@ -36,6 +32,8 @@ public class CommentServiceImpl implements CommentService {
     private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
 
     /**
@@ -61,6 +59,8 @@ public class CommentServiceImpl implements CommentService {
             if (dbcomment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            commentExtMapper.incCommentCount(commentDTO.getParentId());
+
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(commentDTO.getParentId());
@@ -91,8 +91,16 @@ public class CommentServiceImpl implements CommentService {
         for (Comment comment : comments) {
             commentDataList.add(new CommentData(comment,userMapper.selectByPrimaryKey(comment.getCommentId()),commentMapper.countByExample(example)));
         }
-
-
         return commentDataList;
+    }
+
+    @Override
+    public Long incLikeCount(long commentId) {
+
+        commentExtMapper.incLikeCount(commentId);
+
+        Comment comment = commentMapper.selectByPrimaryKey(commentId);
+
+        return comment.getLikeCount();
     }
 }
