@@ -33,7 +33,8 @@
 
                     <div class="form-group">
                         <label for="title">问题标题(简单扼要):</label>
-                        <input  class="form-control" id="title" name="title" placeholder="问题标题" th:value="${title}">
+                        <input  class="form-control" id="title" name="title" placeholder="问题标题"
+                               autocomplete="off" th:value="${title}">
                     </div>
                     <div class="form-group">
                         <label for="discription">问题补充:</label><br>
@@ -46,7 +47,7 @@
 
                     <div class="form-group">
                         <label for="tags">添加标签</label>
-                        <input  class="form-control" id="tags" name="tags" placeholder="问题标签(以,分割)" th:value="${tags}">
+                        <input  class="form-control" id="tags" name="tags" placeholder="问题标签(以,分割)" th:value="${tags}" autocomplete="off">
                     </div>
 
                     <!--隐藏ID-->

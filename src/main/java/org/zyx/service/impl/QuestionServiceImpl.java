@@ -1,5 +1,6 @@
 package org.zyx.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,13 @@ import org.zyx.entity.PagingData;
 import org.zyx.entity.QuestionDTO;
 import org.zyx.model.Question;
 import org.zyx.model.QuestionExample;
+import org.zyx.repository.QuestionExtMapper;
 import org.zyx.repository.QuestionMapper;
 import org.zyx.repository.UserMapper;
 import org.zyx.service.QuestionService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,6 +30,8 @@ public class QuestionServiceImpl implements QuestionService{
     private QuestionMapper questionMapper ;
     @Autowired
     private UserMapper userMapper ;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Override
     public PagingData findQuestion(Integer currentPage, Integer count) {
@@ -123,6 +128,17 @@ public class QuestionServiceImpl implements QuestionService{
         }
 
         return count;
+    }
+
+    @Override
+    public Collection<Question> selectRelated(QuestionDTO questionDTO) {
+
+        if(StringUtils.isBlank(questionDTO.getTags())){
+            return new ArrayList<>();
+        }
+        String tags=questionDTO.getTags().replace(",","|");
+
+        return questionExtMapper.aboutQuestion(questionDTO.getId(),tags);
     }
 
 

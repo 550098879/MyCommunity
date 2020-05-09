@@ -41,7 +41,6 @@ public class CommentHandler {
     @PostMapping("/comment")
     public Object insertComment(@RequestBody CommentDTO commentDTO, HttpSession session) {
 
-        System.out.println("测试" + commentDTO);
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);

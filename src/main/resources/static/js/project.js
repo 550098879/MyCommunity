@@ -20,7 +20,7 @@ function findParentComment(){
                 "</a><button class='btn btn-primary' data-target='#"+item.comment.id+"' type='button' data-toggle='collapse'"+
                 "aria-expanded='false' aria-controls='collapseExample' onclick='findPChildComment("+item.comment.id+")'>"+       //评论按钮
                 "<span class='glyphicon glyphicon-comment'  aria-hidden='true'></span>  "+item.comment.count+
-                "</button><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
+                "</button><span  style='float: right;'>"+new Date(item.comment.gmtModified).toLocaleString()+
                 "</span></div>"+
                 "<div class='collapse' id='"+item.comment.id+"'>"+
                 "<div class='well' id='comment-"+item.comment.id+"'>"+
@@ -67,7 +67,7 @@ function findPChildComment(parentId){
             childComment+="<div class='media'><div class='media-left'><a href='#'>"+
                 "<img class='media-object' style='width:40px;height:40px;border-radius:5px;' src='"+item.user.avatarUrl+"'></a></div>"+
                 "<div class='media-body'><h4 class='media-heading'>"+item.user.name+"</h4>"+item.comment.content+   //这是回复的内容
-                "</a><span  style='float: right;'>回复时间:  "+new Date(item.comment.gmtModified).toLocaleString()+
+                "</a><span  style='float: right;'>"+new Date(item.comment.gmtModified).toLocaleString()+
                 "</span></div></div><hr></div>" ;
 
         }

@@ -97,9 +97,6 @@
                     <input type="hidden" id="type" value="1">
 
                 </div>
-
-
-
             </div>
 
             <!--列表区-->
@@ -107,10 +104,25 @@
                 <h4>发起人</h4>
                 <img th:src="${question.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
                 <a th:text="${question.user.getName()}"></a>
-
                 <hr>
 
+                <!--推荐内容-->
+                <div>
+                    <h4>推荐内容</h4>
+                    <img src="/images/刈剑.png" alt="刈剑" width="100px" height="100px">
+                    <img src="/images/杯中酒.gif" alt="沉醉不知归处" width="70px" height="100px">
+                </div>
+
+                <hr>
                 <h4>相关问题</h4>
+                <ul th:if="${aboutQuestion != null}" >
+                    <li th:each="related : ${aboutQuestion}" style="margin: 5px -20px;">
+                        <a th:href="'/question/'+${related.getId()}" th:text="${related.title}"></a>
+                    </li>
+                </ul>
+
+
+
 
             </div>
 
