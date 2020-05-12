@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zyx.entity.CommentDTO;
 import org.zyx.entity.QuestionDTO;
-import org.zyx.model.Comment;
-import org.zyx.model.Question;
+import org.zyx.enums.InformStatusEnum;
+import org.zyx.model.*;
+import org.zyx.repository.InformMapper;
 import org.zyx.repository.QuestionExtMapper;
 import org.zyx.service.QuestionService;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class QuestionHandler {
     private QuestionService questionService;
     @Autowired
     private QuestionExtMapper questionExtMapper;
+    @Autowired
+    private InformMapper informMapper;
 
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") long id, Model model){
@@ -43,6 +47,18 @@ public class QuestionHandler {
         return "questionInfo";
     }
 
+    //处理消息为已读
+    @GetMapping("/inform/{id}/{informId}")
+    public String informtoQuestion(@PathVariable("id") long id, @PathVariable("informId") long informId,Model model){
+
+        //将通知设为已读
+        Inform inform = new Inform();
+        inform.setStatus(InformStatusEnum.READ.getStatus());
+        InformExample example = new InformExample();
+        example.createCriteria().andIdEqualTo(informId);
+        informMapper.updateByExampleSelective(inform, example);//更新状态
+        return "redirect:/question/"+id;
+    }
 
 
 

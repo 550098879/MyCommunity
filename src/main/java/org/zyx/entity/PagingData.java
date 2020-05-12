@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**分页相关数据
@@ -13,9 +14,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagingData {
+public class PagingData<T> {
 
-    private List<QuestionDTO> questionList;
+    private Collection<T> data;//复用,统一泛型
 
     private Integer pageCount;
     private Integer currentPage;

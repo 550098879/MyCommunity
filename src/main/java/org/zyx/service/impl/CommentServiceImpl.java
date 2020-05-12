@@ -6,11 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zyx.entity.CommentDTO;
 import org.zyx.entity.CommentData;
 import org.zyx.enums.CommentTypeEnum;
+import org.zyx.enums.InformEnum;
+import org.zyx.enums.InformStatusEnum;
 import org.zyx.exception.CustomizeErrorCode;
 import org.zyx.exception.CustomizeException;
-import org.zyx.model.Comment;
-import org.zyx.model.CommentExample;
-import org.zyx.model.Question;
+import org.zyx.model.*;
 import org.zyx.repository.*;
 import org.zyx.service.CommentService;
 
@@ -34,16 +34,17 @@ public class CommentServiceImpl implements CommentService {
     private UserMapper userMapper;
     @Autowired
     private CommentExtMapper commentExtMapper;
+    @Autowired
+    private InformMapper informMapper;
 
 
     /**
      * @param commentDTO 接收前端传来的回复参数
-     * @param userId     回复用户ID
      * @Transactional 将整个方法作为事务, 失败则整体回滚
      */
     @Override
     @Transactional //事务功能
-    public void insertComment(CommentDTO commentDTO, Long userId) {
+    public void insertComment(CommentDTO commentDTO, User user) {
         //判断问题是否被删除,或不存在
         if (commentDTO.getParentId() == null || commentDTO.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -60,6 +61,8 @@ public class CommentServiceImpl implements CommentService {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentExtMapper.incCommentCount(commentDTO.getParentId());
+            //创建通知
+            createInform(dbcomment.getParentId(), user, dbcomment.getCommentId(), InformEnum.REPLY_COMMENT,dbcomment.getContent());
 
         } else {
             //回复问题
@@ -67,18 +70,39 @@ public class CommentServiceImpl implements CommentService {
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+            //创建通知
+            createInform(question.getId(), user, question.getCreaterId(), InformEnum.REPLY_QUESTION,question.getTitle());
         }
+
         Comment comment = new Comment();
         comment.setParentId(commentDTO.getParentId());
         comment.setContent(commentDTO.getContent());
         comment.setType(commentDTO.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
-        comment.setCommentId(userId);
+        comment.setCommentId(user.getId());
 
         commentMapper.insertSelective(comment);
         questionExtMapper.incCommentCount(commentDTO.getParentId());   //增加评论数
 
+    }
+
+    private void createInform(Long questionId, User user, Long receiver, InformEnum informEnum,String title) {
+        /**添加通知
+         *  1.ctrl + alt + m 将选中的代码生成方法
+         *  2.ctrl + alt + p 将将变量抽出变为参数(形参)
+         */
+        Inform inform = new Inform();
+        inform.setGmtCreate(System.currentTimeMillis());
+        inform.setType(informEnum.getType());//类型
+        inform.setOuterid(questionId);//问题ID
+        inform.setNotifier(user.getId());//发出通知的人
+        inform.setStatus(InformStatusEnum.UNREAD.getStatus());
+        inform.setReceiver(receiver);//接受通知的人
+        inform.setInformName(user.getName());//新增发出通知的人的用户名
+        inform.setOuterTitle(title);//标题
+
+        informMapper.insert(inform);
     }
 
     @Override

@@ -2,23 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>发布 - 刈剑社区</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/project.css">
+    <script src="/js/project.js"></script>
 
 
 </head>
 <body>
 
 
+<!--导航栏-->
+<div th:insert="~{navigation.html :: nav}"></div>
 
-    <!--导航栏-->
-    <div th:insert="~{navigation.html :: nav}"></div>
-
-    <!--主面板-->
+<!--主面板-->
 <div style="width:90%;height:800px;margin: 0 auto;" class="container">
     <div class="container-fluid" style="margin:30px;">
         <div class="row">
@@ -33,12 +33,13 @@
 
                     <div class="form-group">
                         <label for="title">问题标题(简单扼要):</label>
-                        <input  class="form-control" id="title" name="title" placeholder="问题标题"
+                        <input class="form-control" id="title" name="title" placeholder="问题标题"
                                autocomplete="off" th:value="${title}">
                     </div>
                     <div class="form-group">
                         <label for="discription">问题补充:</label><br>
-                        <textarea name="discription" id="discription"  class="form-control" rows="10" th:text="${discription}"></textarea>
+                        <textarea name="discription" id="discription" class="form-control" rows="10"
+                                  th:text="${discription}"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -47,19 +48,46 @@
 
                     <div class="form-group">
                         <label for="tags">添加标签</label>
-                        <input  class="form-control" id="tags" name="tags" placeholder="问题标签(以,分割)" th:value="${tags}" autocomplete="off">
+                        <input class="form-control" id="tags" name="tags" placeholder="问题标签(以,分割)" th:value="${tags}"
+                               autocomplete="off" data-toggle="collapse" href="#collapseExample" aria-expanded="false"
+                               aria-controls="collapseExample">
+
+                        <div class="collapse" id="collapseExample">
+                            <div class="well" style="background-color: #dffcff;">
+                                <!--弹出窗内容,提供的标签-->
+                                <div style="font-size:18px;" >
+                                    <span style="margin-left: 5px;"
+                                          class="label label-info" onclick="selectTag('java')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="java"></span>
+                                    </span>
+                                            <span style="margin-left: 5px;"
+                                                  class="label label-info" onclick="selectTag('sql')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="sql"></span>
+                                    </span>
+                                            <span style="margin-left: 5px;"
+                                                  class="label label-info" onclick="selectTag('spring')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span  th:text="spring"></span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
                     </div>
 
                     <!--隐藏ID-->
                     <input type="hidden" th:value="${id}" name="id">
-
                     <button type="submit" class="btn btn-success">
                         发布问题
                     </button>
-
                     <span class="alert alert-success" role="alert" th:if="${success!=null}" th:text="${success}"></span>
                     <span class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}"></span>
-
 
 
                 </form>
@@ -70,14 +98,14 @@
             <!--列表区-->
             <div class="col-md-3">
 
-                <h3>问题发起指南 <small>注意主题</small></h3>
-                <ul  class="list-group">
+                <h3>问题发起指南
+                    <small>注意主题</small>
+                </h3>
+                <ul class="list-group">
                     <li class="list-group-item">问题标题:请用简介的语言描述您发布的问题,不超过25个字</li>
                     <li class="list-group-item">问题补充:详细补充您的问题内容,并确保问题描述清晰直观,并提供一些相关资料</li>
                     <li class="list-group-item">选择标签:选择一个或多个合适的标签,用逗号隔开,每个标签不超过十个字</li>
                 </ul>
-
-
 
 
             </div>
@@ -87,8 +115,6 @@
     </div>
 
 </div>
-
-
 
 
 </body>

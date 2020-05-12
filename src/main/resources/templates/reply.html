@@ -18,16 +18,69 @@
 <!--第二种方法:<div th:insert="~{navigation.html :: nav}"></div>-->
 
 
-<div style="width:90%;margin: 0 auto;" class="container">
+<div style="width:90%;height:800px;margin: 0 auto;" class="container">
 
     <!--主面板-->
 
     <div class="container-fluid" style="margin:30px;">
         <div class="row">
-            <!--个人中心-->
+            <!--信息区-->
             <div class="col-md-9">
                 <h2 th:text="${sectionName}"></h2>
                 <hr>
+
+                <!--显示回复信息-->
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="inform : ${session.pagingData.getData()}">
+                        <!--回复人:点击查看该用户信息-->
+                        <a th:href="..." th:text="${inform.getInformName()}"></a>
+                        <!--回复类别-->
+                        <span th:if="${inform.getType() == 1}" th:text="回复了你的问题"></span>
+                        <span th:if="${inform.getType() == 2}" th:text="回复了你的评论"></span>
+                        <!--回复的标题-->
+                        <a th:href="'/inform/'+${inform.getOuterid()}+'/'+${inform.getId()}" th:text="${inform.getOuterTitle()}"></a>
+                        <!--回复的时间-->
+                        <span th:text="${#dates.format(inform.getGmtCreate(),'yyyy-MM-dd hh:mm')}" STYLE="float:right;"></span>
+
+                        <!--状态:已读,未读-->
+                        <span th:if="${inform.getStatus() == 1}" th:text="已读" class="badge"></span>
+                        <span th:if="${inform.getStatus() == 0}" th:text="未读" class="badge" style="background-color: red;"></span>
+
+                    </li>
+
+                </ul>
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li th:if="${session.pagingData.isShowFirstPage()}">
+                            <a th:href="'/profile/reply?currentPage=1'" aria-label="Previous">
+                                <span aria-hidden="false">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${session.pagingData.isShowLast()}">
+                            <a th:href="'/profile/reply?currentPage='+${session.pagingData.getCurrentPage()-1}">
+                                <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                            </a>
+                        </li>
+
+                        <li th:each="num : ${session.pagingData.getPages()}"
+                            th:class="${session.pagingData.getCurrentPage()==num}?'active' : ''">
+                            <a th:text="${num}" th:href="'/profile/reply?currentPage='+${num}"></a>
+                        </li>
+                        <li th:if="${session.pagingData.isShowNext()}">
+                            <a th:href="'/profile/reply?currentPage='+${session.pagingData.getCurrentPage()+1}">
+                                <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+                            </a>
+                        </li>
+
+
+                        <li th:if="${session.pagingData.isShowEndPage()}">
+                            <a th:href="'/profile/reply?currentPage='+${session.pagingData.getPageCount()}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
 
                 <!--分页-->
@@ -43,7 +96,7 @@
                     </a>
                     <a href="/profile/reply" class="list-group-item" th:class="${section=='reply'} ? 'list-group-item active' : 'list-group-item'">
                         最新回复
-                        <span class="badge">15</span>
+                        <span class="badge informCount"></span>
                     </a>
                 </div>
 

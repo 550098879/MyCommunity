@@ -17,3 +17,7 @@ body{
 hr{
     margin-top: -1px;
 }
+
+.badge{
+    cursor: hand;
+}

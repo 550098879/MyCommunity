@@ -30,23 +30,23 @@
                 <h2 th:text="${sectionName}"></h2>
                 <hr>
                 <!--我的问题列表-->
-                <div class="media" th:each="question:${session.myQuestion.getQuestionList()}">
+                <div class="media" th:each="data:${session.myQuestion.getData()}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-circle" width="64px" height="64px"
-                                 th:src="${question.user.getAvatarUrl()}" th:alt="${question.user.getName()}">
+                                 th:src="${data.user.getAvatarUrl()}" th:alt="${data.user.getName()}">
                         </a>
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading" >
-                            <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a>
+                            <a th:href="'/question/'+${data.getId()}" th:text="${data.getTitle()}"></a>
                         </h4>
 
-                        <div th:text="${question.getDiscription()}"></div>
-                        <span th:text="${question.getCommentCount()}+' 个评论  |  '+
-                                    ${question.getViewCount()}+' 次浏览  |  '+
-                                    ${question.getLikeCount()}+' 关注  |'"></span>
-                        最后更新: <span th:text="${#dates.format(question.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
+                        <div th:text="${data.getDiscription()}"></div>
+                        <span th:text="${data.getCommentCount()}+' 个评论  |  '+
+                                    ${data.getViewCount()}+' 次浏览  |  '+
+                                    ${data.getLikeCount()}+' 关注  |'"></span>
+                        最后更新: <span th:text="${#dates.format(data.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
                     </div>
                     <hr>
                 </div>
@@ -96,7 +96,7 @@
                     </a>
                     <a href="/profile/reply" class="list-group-item" th:class="${section=='reply'} ? 'list-group-item active' : 'list-group-item'">
                         最新回复
-                        <span class="badge">15</span>
+                        <span class="badge informCount"></span>
                     </a>
                 </div>
 

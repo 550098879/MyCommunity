@@ -5,10 +5,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.zyx.exception.CustomizeErrorCode;
-import org.zyx.exception.CustomizeException;
 import org.zyx.entity.PagingData;
 import org.zyx.entity.QuestionDTO;
+import org.zyx.exception.CustomizeErrorCode;
+import org.zyx.exception.CustomizeException;
 import org.zyx.model.Question;
 import org.zyx.model.QuestionExample;
 import org.zyx.repository.QuestionExtMapper;
@@ -36,13 +36,12 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public PagingData findQuestion(Integer currentPage, Integer count) {
 
-        PagingData pagingData = new PagingData();
+        PagingData<QuestionDTO> pagingData = new PagingData();
         List<QuestionDTO> questionDTOS =new ArrayList<>();
         QuestionExample example = new QuestionExample();
         example.setOrderByClause("gmt_modified desc");
         List<Question> questionList=questionMapper
                 .selectByExampleWithBLOBsWithRowbounds(example,new RowBounds((currentPage-1)*count,count));
-
         for (Question question: questionList) {
             long creater_id=question.getCreaterId();
             QuestionDTO questionDTO = new QuestionDTO();
@@ -50,7 +49,7 @@ public class QuestionServiceImpl implements QuestionService{
             questionDTO.setUser(userMapper.selectByPrimaryKey(creater_id));
             questionDTOS.add(questionDTO);
         }
-        pagingData.setQuestionList(questionDTOS);//设置问题列表
+        pagingData.setData(questionDTOS);//设置问题列表
         Integer totalCount=(int)questionMapper.countByExample(new QuestionExample());
         pagingData.setPagination(totalCount,currentPage,count);
 
@@ -60,7 +59,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public PagingData findMyQuestion(long user_id, Integer currentPage, Integer count) {
 
-        PagingData pagingData = new PagingData();
+        PagingData<QuestionDTO>  pagingData = new PagingData();
         List<QuestionDTO> questionDTOS =new ArrayList<>();
         List<Question> questionList=questionMapper
                 .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds((currentPage-1)*count,count));
@@ -72,7 +71,7 @@ public class QuestionServiceImpl implements QuestionService{
             questionDTO.setUser(userMapper.selectByPrimaryKey(creater_id));
             questionDTOS.add(questionDTO);
         }
-        pagingData.setQuestionList(questionDTOS);//设置问题列表
+        pagingData.setData(questionDTOS);//设置问题列表
 
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreaterIdEqualTo((long) user_id);

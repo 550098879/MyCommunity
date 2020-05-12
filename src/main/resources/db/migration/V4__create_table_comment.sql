@@ -10,3 +10,4 @@ CREATE TABLE PUBLIC.comment
     content varchar(1024),   /*评论内容*/
     count BIGINT default 0   /*被回复次数*/
 );
+

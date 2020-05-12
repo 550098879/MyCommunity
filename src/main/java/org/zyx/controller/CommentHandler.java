@@ -48,9 +48,8 @@ public class CommentHandler {
         if(StringUtils.isBlank(commentDTO.getContent())){//判断字符串是否为空或"",以去空格
             return ResultDTO.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
         }
-
-
-        commentService.insertComment(commentDTO, user.getId());
+        //插入评论
+        commentService.insertComment(commentDTO, user);
         return ResultDTO.okOf();
     }
 

@@ -3,14 +3,15 @@ package org.zyx.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.zyx.entity.PagingData;
+import org.zyx.enums.InformStatusEnum;
+import org.zyx.model.InformExample;
 import org.zyx.model.QuestionExample;
 import org.zyx.model.User;
+import org.zyx.repository.InformMapper;
 import org.zyx.repository.QuestionMapper;
+import org.zyx.service.InformService;
 import org.zyx.service.QuestionService;
 
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,11 @@ public class ProfileHandler {
     private QuestionMapper questionMapper;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private InformService informService;
+    @Autowired
+    private InformMapper informMapper;
+
 
     @GetMapping("/{action}")
     public String profile(@PathVariable("action") String action, Model model, HttpSession session,
@@ -47,12 +53,31 @@ public class ProfileHandler {
         }else if("reply".equals(action)){
             model.addAttribute("section","reply");
             model.addAttribute("sectionName","最新回复");
+
+            //获取最新回复
+            PagingData pagingData = informService.list(user.getId(), currentPage, 10);
+            session.setAttribute("pagingData",pagingData);
+
         }
         return action;
     }
 
 
 
+    @ResponseBody
+    @GetMapping("/getInformCount")
+    public Long getInformCount(HttpSession session){
+        long count = 0;
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            //获取未读的通知
+            InformExample example = new InformExample();
+            example.createCriteria().andReceiverEqualTo(user.getId())
+                    .andStatusEqualTo(InformStatusEnum.UNREAD.getStatus());//未读消息
+            count = informMapper.countByExample(example);
+        }
+        return count;
+    }
 
 
 }

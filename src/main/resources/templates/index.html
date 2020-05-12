@@ -44,26 +44,26 @@
                 </h2>
                 <hr>
 
-                <div class="media" th:each="question:${session.pagingData.getQuestionList()}">
+                <div class="media" th:each="data:${session.pagingData.getData()}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-circle" width="64px" height="64px"
-                                 th:src="${question.user.getAvatarUrl()}" th:alt="${question.user.getName()}">
+                                 th:src="${data.user.getAvatarUrl()}" th:alt="${data.user.getName()}">
                         </a>
                     </div>
                     <div class="media-body">
                         <!--标题-->
                         <h4 class="media-heading">
-                            <a th:href="'/question/'+${question.getId()}" th:text="${question.getTitle()}"></a>
+                            <a th:href="'/question/'+${data.getId()}" th:text="${data.getTitle()}"></a>
                         </h4>
 
-                        <div th:text="${question.getDiscription()}"
+                        <div th:text="${data.getDiscription()}"
                              style="width: 500px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
                         </div>
-                        <span th:text="${question.getCommentCount()}+' 个评论  |  '+
-                                    ${question.getViewCount()}+' 次浏览  |  '+
-                                    ${question.getLikeCount()}+' 关注  |'"></span>
-                        最后更新: <span th:text="${#dates.format(question.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
+                        <span th:text="${data.getCommentCount()}+' 个评论  |  '+
+                                    ${data.getViewCount()}+' 次浏览  |  '+
+                                    ${data.getLikeCount()}+' 关注  |'"></span>
+                        最后更新: <span th:text="${#dates.format(data.getGmtModified(),'  YYYY-MM-dd HH:mm')}"></span>
                     </div>
                     <hr>
                 </div>

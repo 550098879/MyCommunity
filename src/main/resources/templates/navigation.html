@@ -39,10 +39,25 @@
                             <img width="40px" height="40px" class="img-circle" th:src="${session.user.getAvatarUrl()}" th:alt="${session.user.getName()}">
                         </li>
 
-                        <li class="dropdown" th:if="${session.user!=null}">
+                        <li  th:if="${session.user!=null}">
                             <a href="/publish">发布问题</a>
                         </li>
+                        <li  th:if="${session.user!=null}">
+                            <a href="/profile/reply">
+                                通知 <span class="badge informCount" style="background-color: red;"></span>
 
+                                <script>
+                                    function getInformCount(){
+                                        $.get("/profile/getInformCount",function(data){
+                                            $(".informCount").text(data);
+                                        });
+                                    }
+                                    getInformCount();
+                                    setInterval("getInformCount()",5000);
+                                </script>
+
+                            </a>
+                        </li>
                         <li class="dropdown" th:if="${session.user!=null}">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i th:text="${session.user.getName()}"></i><span class="caret"></span>

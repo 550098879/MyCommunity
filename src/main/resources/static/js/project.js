@@ -23,7 +23,7 @@ function findParentComment(){
                 "</button><span  style='float: right;'>"+new Date(item.comment.gmtModified).toLocaleString()+
                 "</span></div>"+
                 "<div class='collapse' id='"+item.comment.id+"'>"+
-                "<div class='well' id='comment-"+item.comment.id+"'>"+
+                "<div class='well well-lg' id='comment-"+item.comment.id+"'>"+
                 //折叠窗口
                 "</div></div>"+
                 "</div><hr></div>";
@@ -87,15 +87,11 @@ function findPChildComment(parentId){
 }
 
 function like(id){
-
+//添加点赞数
     $.get("/likeComment/"+id,function(data){
         $("#like-"+id).html(data);
     });
 }
-
-
-
-
 
 //回复问题的ajax请求
 function insertComment(commentId) {
@@ -157,4 +153,22 @@ function insertComment(commentId) {
             }
         },
     });
+}
+
+
+//添加标签
+function selectTag(tag){
+
+    var tags = $("#tags").val();
+    if(tags.length == 0){
+        $("#tags").val(tag);
+    }else{
+        if(tags.indexOf(tag) == -1){
+            tags = tags+","+ tag ;
+            $("#tags").val(tags);
+        }
+
+    }
+
+
 }

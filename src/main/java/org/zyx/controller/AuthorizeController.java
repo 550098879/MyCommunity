@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zyx.entity.AccessTokenDTO;
 import org.zyx.entity.GithubUser;
+import org.zyx.model.InformExample;
 import org.zyx.model.User;
 import org.zyx.provider.GithubProvider;
+import org.zyx.repository.InformMapper;
 import org.zyx.repository.UserMapper;
 import org.zyx.service.UserService;
 
@@ -31,6 +33,7 @@ public class AuthorizeController {
     private UserMapper userMapper;
     @Autowired
     private UserService userService;
+
 
 
     @Value("${github.client.id}")
@@ -75,6 +78,8 @@ public class AuthorizeController {
 //            userRepository.insert(user);//存储进数据库中
             //将token设置到cookie中,而不是直接设置到session中
             response.addCookie(new Cookie("token",token));
+
+
 
 //            HttpSession session=request.getSession();
 //            session.setAttribute("Guser",Guser);

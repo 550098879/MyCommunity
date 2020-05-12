@@ -5,7 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zyx.entity.PagingData;
+import org.zyx.enums.InformEnum;
+import org.zyx.enums.InformStatusEnum;
 import org.zyx.exception.CustomizeErrorCode;
+import org.zyx.model.Inform;
+import org.zyx.model.InformExample;
+import org.zyx.model.User;
+import org.zyx.repository.InformMapper;
 import org.zyx.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +26,8 @@ public class IndexHandler {
 
     @Autowired
     private QuestionService questionService;
-
+    @Autowired
+    private InformMapper informMapper;
 
     @GetMapping("/")
 //    @RequestParam(name="name", required=false, defaultValue="World") String name, Model model
@@ -31,6 +38,8 @@ public class IndexHandler {
         //处理主页的问题数据
         PagingData pagingData=questionService.findQuestion(currentPage,count);
         request.getSession().setAttribute("pagingData",pagingData);
+
+
 
         return "index";
     }
