@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/project.css">
     <script src="/js/project.js"></script>
+    <link rel="stylesheet" href="/css/editormd.css">
 
 </head>
 <body>
@@ -40,7 +41,23 @@
                         +' | 阅读数: '+ ${question.getViewCount()}">
                 </span>
                 <hr>
-                <span th:text="${question.discription}"></span>
+                <!--添加富文本功能显示问题描述-->
+                <link rel="stylesheet" href="/css/editormd.preview.css" />
+                <div id="test-markdown-view">
+                    <!-- Server-side output Markdown text -->
+                    <textarea style="display:none;" th:text="${question.discription}"></textarea>
+                </div>
+                <script src="/js/editormd.js"></script>
+                <script src="/js/lib/marked.min.js"></script>
+                <script src="/js/lib/prettify.min.js"></script>
+                <script type="text/javascript">
+                    $(function() { editormd.markdownToHTML("test-markdown-view", {
+
+
+                    });});
+                </script>
+
+
                 <hr>
 
                 <!--标签-->
