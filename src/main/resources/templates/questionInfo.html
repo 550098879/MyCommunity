@@ -51,10 +51,7 @@
                 <script src="/js/lib/marked.min.js"></script>
                 <script src="/js/lib/prettify.min.js"></script>
                 <script type="text/javascript">
-                    $(function() { editormd.markdownToHTML("test-markdown-view", {
-
-
-                    });});
+                    $(function() { editormd.markdownToHTML("test-markdown-view", {});});
                 </script>
 
 
@@ -85,6 +82,9 @@
 
                 <!--评论列表-->
                 <h3 id="commentCount"></h3>
+
+                <script>findParentComment();</script>
+
                 <hr>
 
                 <div id="result">

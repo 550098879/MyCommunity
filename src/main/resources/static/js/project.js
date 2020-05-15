@@ -1,5 +1,5 @@
 window.onload=function(){
-    findParentComment();//加载评论信息
+
 }
 
 //获取父级评论的ajax请求
@@ -29,8 +29,11 @@ function findParentComment(){
                 "</div><hr></div>";
         }
         $("#result").html(html);
-        var commentCount =item.commentCount+"个回复";
-        $("#commentCount").html(commentCount);
+        if(data.length > 0){
+            var commentCount =item.commentCount+"个回复";
+            $("#commentCount").html(commentCount);
+        }
+
     });
 }
 
