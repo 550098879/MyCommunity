@@ -29,10 +29,10 @@ import java.util.List;
 public class ConnectTencentCloud {
 
     private static COSClient cosClient = null;
-    private String SecretId = "AKIDg6QTHovtTrxrUrrlKcdz4sQggPxwfxpa";
-    private String SecretKey = "FDt0qSnqd9OMAhyyh9NL1e17wVnpa4Ar";
-    private String apCity = "ap-guangzhou";//存储桶地域
-    private static String  bucketName = "01-start-1302118368";//存储桶名称
+    private String SecretId = "********";
+    private String SecretKey = "********";
+    private String apCity = "********";//存储桶地域
+    private static String  bucketName = "*********";//存储桶名称
 
     public org.slf4j.Logger log = LoggerFactory.getLogger(ConnectTencentCloud.class);
 
