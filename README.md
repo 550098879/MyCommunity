@@ -84,11 +84,14 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 - git clone 项目github连接
 - yum install maven   安装maven
 - mvn -v  查看版本号
-- mvn [clean] compile package 打包启动 第一次会下载maven仓库
+- mvn [clean] compile package 打包 第一次会下载maven仓库
 - cp src/main/resources/application.properties  
 	src/main/resources/application-production.properties 
-- vim src/main/resources/application-production   按a编辑,修改端口为80
-
+- vim src/main/resources/application-production   按a编辑,修改端口为80,回调地址为服务器公网ip
+- mvn package 打包
+- java -jar Dsprong.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
+- ps -aux   | grep java
+- git pull 拉取修改后的代码
 ## 更新日志
 - 2019-7-30 修复 session 过期时间很短问题   
 - 2019-8-2 修复因为*和+号产生的搜索异常问题  

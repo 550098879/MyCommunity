@@ -1,13 +1,13 @@
 CREATE TABLE question
 (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30),
-    discription TEXT,
-    gmt_create BIGINT,
-    gmt_modified BIGINT,
-    creater_id BIGINT,
-    comment_count BIGINT DEFAULT 0,
-    view_count BIGINT DEFAULT 0,
-    like_count BIGINT DEFAULT 0,
-    tags VARCHAR(256),
+    ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+    TITLE varchar(30),
+    DISCRIPTION clob,
+    GMT_CREATE bigint,
+    GMT_MODIFIED bigint,
+    CREATER_ID bigint,
+    COMMENT_COUNT bigint DEFAULT 0,
+    VIEW_COUNT bigint DEFAULT 0,
+    LIKE_COUNT bigint DEFAULT 0,
+    TAGS varchar(256)
 );
