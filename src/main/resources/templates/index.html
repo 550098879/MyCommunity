@@ -108,14 +108,49 @@
             <div class="col-md-3">
                 <h3>热门主题</h3>
 
+                <div style="font-size:18px;">
+                                    <span style="margin-left: 5px;"
+                                          class="label label-info" onclick="selectTag('java')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="java"></span>
+                                    </span>
+                    <span style="margin-left: 5px;"
+                          class="label label-info" onclick="selectTag('sql')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="sql"></span>
+                                    </span>
+                    <span style="margin-left: 5px;"
+                          class="label label-info" onclick="selectTag('spring')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="spring"></span>
+                                    </span>
+                    <span style="margin-left: 5px;"
+                          class="label label-info" onclick="selectTag('MarkDown')">
+                                         <span class="glyphicon glyphicon-tags"></span>
+                                         <span th:text="MarkDown"></span>
+                                    </span>
+                </div>
+
+                <div>
+                    <h4>推荐内容</h4>
+                    <img src="/images/刈剑.png" alt="刈剑" width="100px" height="100px">
+                    <img src="/images/杯中酒.gif" alt="沉醉不知归处" width="70px" height="100px">
+                </div>
+
+                <hr>
+
+
+
             </div>
 
 
         </div>
     </div>
 
-
+    <div th:include="footer.html :: footer"></div>
 </div>
+
+
 
 </body>
 </html>

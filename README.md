@@ -67,6 +67,23 @@ mvn flyway:migrate
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ```
 
+
+## 部署到云服务器,进入云服务器cmd
+### 依赖
+
+- Git
+- JDK
+- Maven
+- MySQL
+
+### 步骤
+- yum update       更新源
+- yum install git  安装git
+- mkdir App
+- cd App
+- git clone 项目github连接
+
+
 ## 更新日志
 - 2019-7-30 修复 session 过期时间很短问题   
 - 2019-8-2 修复因为*和+号产生的搜索异常问题  

@@ -29,14 +29,24 @@ public class IndexHandler {
     @Autowired
     private InformMapper informMapper;
 
+    public  String search = "";
+
     @GetMapping("/")
-//    @RequestParam(name="name", required=false, defaultValue="World") String name, Model model
     public String index(HttpServletRequest request,
                         @RequestParam(name="currentPage", required=false, defaultValue="1") Integer currentPage,
-                        @RequestParam(name="count", required=false, defaultValue="5") Integer count){
+                        @RequestParam(name="count", required=false, defaultValue="5") Integer count,
+                        @RequestParam(name="search", required=false, defaultValue ="") String search,
+                        @RequestParam(name="index", required=false, defaultValue ="") String index){
 
-        //处理主页的问题数据
-        PagingData pagingData=questionService.findQuestion(currentPage,count);
+        //处理主页的问题数据,判断是否有进行搜索
+        if (search.length() > 0){
+            this.search = search;
+        }
+        if(index.length() > 0){
+            this.search = "";
+        }
+
+        PagingData pagingData=questionService.findQuestion(this.search,currentPage,count);
         request.getSession().setAttribute("pagingData",pagingData);
 
 

@@ -20,7 +20,9 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode{
     SYS_ERROR(2004,"太热了,服务器一边凉快去了!"),
     TYPE_PARAM_WRONG(2005,"评论类型错误或不存在"),
     COMMENT_NOT_FOUND(2006,"回复的评论不存在了,要不换个试试"),
-    CONTENT_IS_EMPTY(2007,"回复的内容不能为空");
+    CONTENT_IS_EMPTY(2007,"回复的内容不能为空"),
+    File_exceed(2008,"上传失败,图片大小不能超过1048576个字节(1mb)!"),
+    ;
 
     private String message;
     private Integer code;

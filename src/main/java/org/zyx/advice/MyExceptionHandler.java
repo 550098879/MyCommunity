@@ -39,6 +39,11 @@ public class MyExceptionHandler {
                 modelAndView.addObject("message",ex.getMessage());
                 return modelAndView;
             }else{
+
+                if (ex.getMessage().indexOf("1048576")>-1){
+                    return ResultDTO.errorOf(CustomizeErrorCode.File_exceed);
+                }
+
                 return ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
 

@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 public interface QuestionService {
 
-    PagingData findQuestion(Integer currentPage, Integer count);
+    PagingData findQuestion(String search,Integer currentPage, Integer count);
 
     PagingData findMyQuestion(long id, Integer currentPage, Integer count);
 

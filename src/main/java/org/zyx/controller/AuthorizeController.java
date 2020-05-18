@@ -1,5 +1,6 @@
 package org.zyx.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import java.util.UUID;
  * Created by SunShine on 2020/4/16.
  */
 @Controller
+@Slf4j  //lombok注解,自动将日志注入
 public class AuthorizeController {
 
 
@@ -86,6 +88,8 @@ public class AuthorizeController {
             return "redirect:/";//重定向
         }else{
             //登陆失败,重新登陆
+            //打印日志{},产生异常的对象
+            log.error("callback get GitHub error,{}",Guser);
         }
 
 

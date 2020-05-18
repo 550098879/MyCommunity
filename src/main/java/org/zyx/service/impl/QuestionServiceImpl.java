@@ -34,12 +34,15 @@ public class QuestionServiceImpl implements QuestionService{
     private QuestionExtMapper questionExtMapper;
 
     @Override
-    public PagingData findQuestion(Integer currentPage, Integer count) {
+    public PagingData findQuestion(String search,Integer currentPage, Integer count) {
 
         PagingData<QuestionDTO> pagingData = new PagingData();
         List<QuestionDTO> questionDTOS =new ArrayList<>();
         QuestionExample example = new QuestionExample();
         example.setOrderByClause("gmt_modified desc");
+        if(search.length() > 0){
+            example.createCriteria().andTitleLike("%"+search+"%");
+        }
         List<Question> questionList=questionMapper
                 .selectByExampleWithBLOBsWithRowbounds(example,new RowBounds((currentPage-1)*count,count));
         for (Question question: questionList) {
@@ -50,7 +53,7 @@ public class QuestionServiceImpl implements QuestionService{
             questionDTOS.add(questionDTO);
         }
         pagingData.setData(questionDTOS);//设置问题列表
-        Integer totalCount=(int)questionMapper.countByExample(new QuestionExample());
+        Integer totalCount=(int)questionMapper.countByExample(example);
         pagingData.setPagination(totalCount,currentPage,count);
 
         return pagingData;

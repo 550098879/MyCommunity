@@ -18,14 +18,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/">刈剑社区</a>
+                    <a class="navbar-brand" href="/?index='true'">刈剑社区</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-                    <form class="navbar-form navbar-left">
+                    <form class="navbar-form navbar-left" action="/" method="get">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="搜索话题,问题">
+                            <input type="text" name="search" class="form-control" placeholder="搜索话题,问题">
                         </div>
                         <button type="submit" class="btn btn-default">搜索</button>
                     </form>
@@ -52,8 +52,8 @@
                                             $(".informCount").text(data);
                                         });
                                     }
-                                    getInformCount();
-                                    setInterval("getInformCount()",5000);
+                                   getInformCount();
+                                    //setInterval("getInformCount()",5000);
                                 </script>
 
                             </a>

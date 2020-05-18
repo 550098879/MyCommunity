@@ -164,10 +164,9 @@ public class ConnectTencentCloud {
                 new GeneratePresignedUrlRequest(bucketName, key, HttpMethodName.GET);
 // 设置签名过期时间(可选), 若未进行设置, 则默认使用 ClientConfig 中的签名过期时间(1小时)
 // 这里设置签名在半个小时后过期
-        Date expirationDate = new Date(System.currentTimeMillis() + 60L * 60L * 1000L);
+        Date expirationDate = new Date(System.currentTimeMillis() + 30L * 60L * 1000L);
         req.setExpiration(expirationDate);
         URL url = cosClient.generatePresignedUrl(req);
-        System.out.println(url.toString());
         return url.toString();
     }
 

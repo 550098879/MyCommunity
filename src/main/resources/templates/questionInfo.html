@@ -42,7 +42,7 @@
                 </span>
                 <hr>
                 <!--添加富文本功能显示问题描述-->
-                <link rel="stylesheet" href="/css/editormd.preview.css" />
+                <link rel="stylesheet" href="/css/editormd.preview.css"/>
                 <div id="test-markdown-view">
                     <!-- Server-side output Markdown text -->
                     <textarea style="display:none;" th:text="${question.discription}"></textarea>
@@ -51,16 +51,18 @@
                 <script src="/js/lib/marked.min.js"></script>
                 <script src="/js/lib/prettify.min.js"></script>
                 <script type="text/javascript">
-                    $(function() { editormd.markdownToHTML("test-markdown-view", {});});
+                    $(function () {
+                        editormd.markdownToHTML("test-markdown-view", {});
+                    });
                 </script>
 
 
                 <hr>
 
                 <!--标签-->
-                <div style="margin-top: -15px;font-size: 18px;" >
+                <div style="margin-top: -15px;font-size: 18px;">
                     <span style="margin-left: 5px;"
-                            class="label label-info" th:each="tag : ${question.tags.split(',')}">
+                          class="label label-info" th:each="tag : ${question.tags.split(',')}">
                         <span class="glyphicon glyphicon-tags"></span>
                         <span th:text="${tag}"></span>
                     </span>
@@ -89,18 +91,20 @@
 
                 <div id="result">
                     <!--这里是回复列表-->
-
                 </div>
-
-
 
                 <!--评论区-->
                 <div th:if="${session.user == null}" style="text-align: center;">
-                    注册或登录后才能执行评论操作
+                    <img src="/images/商务头像,男士.png" height="40" width="40"/>
+                    <a href="https://github.com/login/oauth/authorize?client_id=c675236053a463ef56cb&redirect_uri=http://localhost:7777/callback&scope=user&state=1">
+                        登录
+                    </a>
+                    后才能执行评论操作
                 </div>
-                <h4>提交回复</h4>
+
                 <hr>
                 <div id="comment" th:if="${session.user != null}">
+                    <h4>提交回复</h4>
                     <img th:src="${session.user.getAvatarUrl()}" style="width:40px;height:40px;border-radius:5px;">
                     <span th:text="${session.user.getName()}"></span>
                     <!--异步刷新-->
@@ -132,13 +136,11 @@
 
                 <hr>
                 <h4>相关问题</h4>
-                <ul th:if="${aboutQuestion != null}" >
+                <ul th:if="${aboutQuestion != null}">
                     <li th:each="related : ${aboutQuestion}" style="margin: 5px -20px;">
                         <a th:href="'/question/'+${related.getId()}" th:text="${related.title}"></a>
                     </li>
                 </ul>
-
-
 
 
             </div>
@@ -147,7 +149,7 @@
         </div>
     </div>
 
-
+    <div th:include="footer.html :: footer"></div>
 </div>
 
 </body>
