@@ -96,7 +96,7 @@
                 <!--评论区-->
                 <div th:if="${session.user == null}" style="text-align: center;">
                     <img src="/images/商务头像,男士.png" height="40" width="40"/>
-                    <a th:href="@{https://github.com/login/oauth/authorize(client_id='c675236053a463ef56cb',redirect_uri=${#httpServletRequest.getRequestURL()},scope='user',state=1)}">
+                    <a th:href="@{https://github.com/login/oauth/authorize(client_id='c675236053a463ef56cb',redirect_uri=${#httpServletRequest.getRequestURL()+'callback'},scope='user',state=1)}">
                         登录
                     </a>
                     后才能执行评论操作
