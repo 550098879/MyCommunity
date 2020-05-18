@@ -82,7 +82,12 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 - mkdir App
 - cd App
 - git clone 项目github连接
-
+- yum install maven   安装maven
+- mvn -v  查看版本号
+- mvn [clean] compile package 打包启动 第一次会下载maven仓库
+- cp src/main/resources/application.properties  
+	src/main/resources/application-production.properties 
+- vim src/main/resources/application-production   按a编辑,修改端口为80
 
 ## 更新日志
 - 2019-7-30 修复 session 过期时间很短问题   

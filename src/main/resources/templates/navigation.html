@@ -31,9 +31,10 @@
                     </form>
                     <ul class="nav navbar-nav navbar-right">
                         <li th:if="${session.user==null}">
-                            <a href="https://github.com/login/oauth/authorize?client_id=c675236053a463ef56cb&redirect_uri=http://localhost:7777/callback&scope=user&state=1">
+                            <a th:href="@{https://github.com/login/oauth/authorize(client_id='c675236053a463ef56cb',redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}">
                                 登录
                             </a>
+
                         </li>
                         <li class="dropdown" th:if="${session.user!=null}">
                             <img width="40px" height="40px" class="img-circle" th:src="${session.user.getAvatarUrl()}" th:alt="${session.user.getName()}">
