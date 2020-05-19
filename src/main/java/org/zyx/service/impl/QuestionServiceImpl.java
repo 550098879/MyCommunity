@@ -64,8 +64,10 @@ public class QuestionServiceImpl implements QuestionService{
 
         PagingData<QuestionDTO>  pagingData = new PagingData();
         List<QuestionDTO> questionDTOS =new ArrayList<>();
+        QuestionExample example1 = new QuestionExample();
+        example1.createCriteria().andCreaterIdEqualTo(user_id);
         List<Question> questionList=questionMapper
-                .selectByExampleWithBLOBsWithRowbounds(new QuestionExample(),new RowBounds((currentPage-1)*count,count));
+                .selectByExampleWithBLOBsWithRowbounds(example1,new RowBounds((currentPage-1)*count,count));
 
         for (Question question : questionList) {
             long creater_id=question.getCreaterId();
